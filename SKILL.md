@@ -1,6 +1,6 @@
 ---
 name: alanstack
-description: Apply Alan's TypeScript/Bun style: neverthrow Result/ResultAsync, Maybe for expected absence, ts-pattern for owned unions, Zod at boundaries, bun:test. Use when writing, refactoring, reviewing, or planning TypeScript in Bun monorepos with Hono/Bun.serve/Drizzle backends or React/TanStack/Vite/shadcn frontends. Local AGENTS.md and configs override these defaults.
+description: "Apply Alan's TypeScript/Bun style: neverthrow Result/ResultAsync, Maybe for expected absence, ts-pattern for owned unions, Zod at boundaries, bun:test. Use when writing, refactoring, reviewing, or planning TypeScript in Bun monorepos with Hono/Bun.serve/Drizzle backends or React/TanStack/Vite/shadcn frontends. Local AGENTS.md and configs override these defaults."
 ---
 
 # Alanstack
