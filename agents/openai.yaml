@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack"
+  short_description: "Alan-style TypeScript and Bun conventions"
+  default_prompt: "Use $alanstack to apply Alan's TypeScript/Bun style to this codebase."
