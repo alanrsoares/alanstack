@@ -34,3 +34,14 @@ This skill was inferred from Yappr, SafeURL, RecallOS, Printr MCP, and re-reduce
 
 - Older code shows the functional/reducer heritage: reducers, selectors, action creators, immutable transforms, and composition.
 - Modern repos supersede its looser historical edges with stricter no-`any`, explicit boundary validation, and `ResultAsync` pipelines.
+
+## Backend vs frontend (cross-repo)
+
+| Layer | Common tools | Repo notes |
+| ----- | ------------ | ---------- |
+| Backend HTTP | `Bun.serve()`, Hono | RecallOS: no Express; Yappr/Printr MCP: Hono |
+| Backend data | Drizzle, `bun:sqlite`, `Bun.sql`, `Bun.redis` | Yappr: SQLite; RecallOS: Postgres; SafeURL: Drizzle packages |
+| Frontend web | React 19, Vite, TanStack Router/Query/Start | RecallOS dashboard, Yappr desktop mainview, Printr web |
+| Frontend TUI | Ink + React, unstated stores | Yappr CLI |
+| Frontend styling | Tailwind, shadcn | Yappr desktop, SafeURL dashboard |
+| Lint | ESLint+Prettier or Biome | Yappr/SafeURL/Printr web: ESLint; RecallOS/Printr MCP: Biome |
