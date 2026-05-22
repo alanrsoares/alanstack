@@ -1,48 +1,69 @@
 #!/usr/bin/env bash
+# Package every skill in `skills/<name>/` as a separate `.skill` archive in `dist/`.
+# Validates each SKILL.md frontmatter (name + description, kebab-case, name == dirname).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-NAME="$(basename "$ROOT")"
-OUT="${1:-$ROOT}"
-SKILL_MD="$ROOT/SKILL.md"
+SKILLS_DIR="$ROOT/skills"
+OUT_DIR="${1:-$ROOT/dist}"
+
+[ -d "$SKILLS_DIR" ] || { echo "no skills/ dir at $ROOT" >&2; exit 2; }
+
+mkdir -p "$OUT_DIR"
 
 fail() { echo "validation: $1" >&2; exit 1; }
 
-[ -f "$SKILL_MD" ] || fail "SKILL.md missing"
+validate_skill() {
+  local dir="$1"
+  local name="$(basename "$dir")"
+  local skill_md="$dir/SKILL.md"
 
-# Extract YAML frontmatter (between first two --- markers).
-FRONTMATTER="$(awk 'BEGIN{n=0} /^---[[:space:]]*$/{n++; next} n==1{print} n>=2{exit}' "$SKILL_MD")"
-[ -n "$FRONTMATTER" ] || fail "SKILL.md missing YAML frontmatter"
+  [ -f "$skill_md" ] || fail "$name: SKILL.md missing"
 
-FM_NAME="$(printf '%s\n' "$FRONTMATTER" | awk -F': *' '/^name:/{print $2; exit}')"
-FM_DESC="$(printf '%s\n' "$FRONTMATTER" | awk -F': *' '/^description:/{sub(/^description: */,""); print; exit}')"
+  # Extract YAML frontmatter (between first two --- markers).
+  local frontmatter
+  frontmatter="$(awk 'BEGIN{n=0} /^---[[:space:]]*$/{n++; next} n==1{print} n>=2{exit}' "$skill_md")"
+  [ -n "$frontmatter" ] || fail "$name: SKILL.md missing YAML frontmatter"
 
-[ -n "$FM_NAME" ] || fail "frontmatter missing name"
-[ -n "$FM_DESC" ] || fail "frontmatter missing description"
-[[ "$FM_NAME" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || fail "name '$FM_NAME' not kebab-case"
-[ "$FM_NAME" = "$NAME" ] || fail "name '$FM_NAME' != directory '$NAME'"
+  local fm_name fm_desc
+  fm_name="$(printf '%s\n' "$frontmatter" | awk -F': *' '/^name:/{print $2; exit}')"
+  fm_desc="$(printf '%s\n' "$frontmatter" | awk '/^description:/{sub(/^description:[ \t]*/,""); print; exit}')"
 
-DESC_LEN=${#FM_DESC}
-[ "$DESC_LEN" -ge 40 ] || fail "description too short ($DESC_LEN chars; aim >=40)"
-[ "$DESC_LEN" -le 1024 ] || fail "description too long ($DESC_LEN chars; max 1024)"
+  [ -n "$fm_name" ] || fail "$name: frontmatter missing name"
+  [ -n "$fm_desc" ] || fail "$name: frontmatter missing description"
+  [[ "$fm_name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || fail "$name: name '$fm_name' not kebab-case"
+  [ "$fm_name" = "$name" ] || fail "$name: frontmatter name '$fm_name' != directory '$name'"
 
-# Reject extraneous top-level docs.
-for forbidden in README.md CHANGELOG.md INSTALLATION_GUIDE.md QUICK_REFERENCE.md; do
-  [ ! -f "$ROOT/$forbidden" ] || fail "$forbidden present; remove before packaging"
+  local desc_len=${#fm_desc}
+  [ "$desc_len" -ge 40 ] || fail "$name: description too short ($desc_len chars; aim >=40)"
+  [ "$desc_len" -le 1024 ] || fail "$name: description too long ($desc_len chars; max 1024)"
+
+  for forbidden in CHANGELOG.md INSTALLATION_GUIDE.md QUICK_REFERENCE.md; do
+    [ ! -f "$dir/$forbidden" ] || fail "$name: $forbidden present; remove before packaging"
+  done
+
+  echo "validate: ok ($fm_name)"
+}
+
+package_skill() {
+  local dir="$1"
+  local name="$(basename "$dir")"
+  local zip_out="$OUT_DIR/$name.skill"
+
+  rm -f "$zip_out"
+  (
+    cd "$SKILLS_DIR"
+    zip -rq "$zip_out" "$name" -x "$name/.git/*" -x "$name/.DS_Store"
+  )
+  echo "package: $zip_out"
+}
+
+for dir in "$SKILLS_DIR"/*/; do
+  validate_skill "$dir"
 done
 
-echo "validation: ok ($FM_NAME)"
+for dir in "$SKILLS_DIR"/*/; do
+  package_skill "$dir"
+done
 
-mkdir -p "$OUT"
-ZIP="$OUT/$NAME.skill"
-rm -f "$ZIP"
-(
-  cd "$(dirname "$ROOT")"
-  zip -rq "$ZIP" \
-    "$NAME/SKILL.md" \
-    "$NAME/references/" \
-    "$NAME/agents/" \
-    "$NAME/scripts/package.sh"
-)
-
-echo "Packaged: $ZIP"
+echo "done: $(ls "$OUT_DIR"/*.skill 2>/dev/null | wc -l | tr -d ' ') skill(s) in $OUT_DIR"

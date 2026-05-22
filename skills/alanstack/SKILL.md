@@ -198,4 +198,20 @@ Read `references/preferred-tools.md` when choosing a library for a purpose (HTTP
 
 Read `references/source-signals.md` only when rules conflict, when applying this skill outside the inferred source repos, or when updating the skill itself. It summarizes which source repos contributed each rule and helps resolve tradeoffs.
 
-When packaging, run `scripts/package.sh` so `.git` is not included in the `.skill` archive.
+## Task subskills
+
+Specialized companions — invoke these when the task is one of these specific operations:
+
+| Skill | Use when |
+|------|----------|
+| [`alanstack-review`](../alanstack-review/SKILL.md) | Reviewing a diff against the quality bar — one line per finding (location, problem, fix). |
+| [`alanstack-refactor`](../alanstack-refactor/SKILL.md) | Applying canonical refactors (Promise<Result> → ResultAsync, switch → ts-pattern, null → Maybe, throws → boundary Result, untyped IO → Zod). |
+| [`alanstack-qa`](../alanstack-qa/SKILL.md) | Verifying a change with the repo's own scripts (lint + typecheck + scoped tests, broaden when touching shared behavior). |
+| [`alanstack-commit`](../alanstack-commit/SKILL.md) | Writing Conventional Commits per Alan's rules — required scope, ≤50 char subject, no AI attribution, no emoji. |
+
+The parent skill (this file) holds the *what* and *why*. The subskills hold the *how to do this specific operation*. They are independently installable but share these references.
+
+## Packaging and install
+
+- `scripts/install.sh` symlinks every `skills/<name>/` into `~/.agents/skills/` for live editing.
+- `scripts/package.sh` iterates the same dirs and produces one `dist/<name>.skill` archive per skill.
