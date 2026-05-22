@@ -9,6 +9,7 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 | [`alanstack`](skills/alanstack/SKILL.md) | The parent — operating loop, quality bar, modern stack shorthand, type/error model, branching, boundaries, communication style. Read first. |
 | [`alanstack-review`](skills/alanstack-review/SKILL.md) | Compressed code review against the quality bar — one line per finding. |
 | [`alanstack-refactor`](skills/alanstack-refactor/SKILL.md) | Canonical refactor moves (Promise<Result> → ResultAsync, switch → ts-pattern, null → Maybe, throws → boundary Result, untyped IO → Zod). |
+| [`alanstack-test`](skills/alanstack-test/SKILL.md) | Test-writing style — `bun:test` runtime, `ts-expect` types, `fast-check` properties, `it.each` tables. No mocks for first-party code. |
 | [`alanstack-qa`](skills/alanstack-qa/SKILL.md) | Verify a change with the repo's own scripts — lint + typecheck + scoped tests. |
 | [`alanstack-commit`](skills/alanstack-commit/SKILL.md) | Conventional Commits with required scope, ≤50 char subject, no AI attribution. |
 
@@ -51,6 +52,7 @@ Each archive is independently installable in any agent that consumes `.skill` zi
     │       └── openai.yaml
     ├── alanstack-review/SKILL.md
     ├── alanstack-refactor/SKILL.md
+    ├── alanstack-test/SKILL.md
     ├── alanstack-qa/SKILL.md
     └── alanstack-commit/SKILL.md
 ```

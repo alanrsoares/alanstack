@@ -160,10 +160,13 @@ return rules.find((r) => r.when(state))?.render() ?? renderIdle;
 ## Tests And Verification
 
 - Use the repo's test runner. In Bun repos, write tests with `bun:test`.
+- **Pick the right layer**: `ts-expect` (`TypeEqual` / `expectType`) for compile-time type contracts, `fast-check` for algebraic laws + invariants + round-trips, `it.each` / `describe.each` for closed enumerable branches with a `label` field, plain `it` for one-offs and regressions. See [`alanstack-test`](../alanstack-test/SKILL.md) for the choice tree and examples.
+- Each package's `tsconfig.json` `include` **must** list `test/**/*.ts` — `bun test` skips type errors, so `tsc --noEmit` is the only thing that validates type assertions in `types.spec.ts`.
+- Spec naming: `*.spec.ts` for units, `*.integration.test.ts` for integrations, `*.smoke.test.ts` for smoke tests. Preserve the target package's existing convention.
+- **No mocks for first-party code.** Compose the real functions. Push IO behind thin adapters and pass fakes through dependency injection rather than module-level patching.
 - Prefer focused tests for narrow refactors; add integration or regression tests when changing shared contracts, persistence, IO, or user-visible workflows.
-- Naming commonly used across these repos: `*.spec.ts` for units, `*.integration.test.ts` for integrations, `*.smoke.test.ts` for smoke tests. Preserve existing conventions in the target package.
-- Run typecheck and lint for TypeScript changes; run Python tests when touching Python.
-- For refactors, prove behavior is unchanged with tests or a targeted before/after check.
+- For refactors, prove behavior is unchanged via the existing suite. If no test covers the path, add one **before** the refactor, not after.
+- Run typecheck and lint for TypeScript changes; run Python tests when touching Python. See [`alanstack-qa`](../alanstack-qa/SKILL.md) for the verification run sequence.
 
 ## Review Heuristics
 
@@ -206,6 +209,7 @@ Specialized companions — invoke these when the task is one of these specific o
 |------|----------|
 | [`alanstack-review`](../alanstack-review/SKILL.md) | Reviewing a diff against the quality bar — one line per finding (location, problem, fix). |
 | [`alanstack-refactor`](../alanstack-refactor/SKILL.md) | Applying canonical refactors (Promise<Result> → ResultAsync, switch → ts-pattern, null → Maybe, throws → boundary Result, untyped IO → Zod). |
+| [`alanstack-test`](../alanstack-test/SKILL.md) | Writing tests — `bun:test` runtime, `ts-expect` types, `fast-check` properties, `it.each` tables, plain `it` for one-offs. No mocks for first-party code. |
 | [`alanstack-qa`](../alanstack-qa/SKILL.md) | Verifying a change with the repo's own scripts (lint + typecheck + scoped tests, broaden when touching shared behavior). |
 | [`alanstack-commit`](../alanstack-commit/SKILL.md) | Writing Conventional Commits per Alan's rules — required scope, ≤50 char subject, no AI attribution, no emoji. |
 
