@@ -1,47 +1,52 @@
 # Source Signals
 
-This skill was inferred from Yappr, SafeURL, RecallOS, Printr MCP, and re-reduced.
+The rules in this skill were inferred from several private TypeScript / Bun repos spanning desktop, terminal, web, MCP/SDK, and inference-sidecar surfaces. The repo names are intentionally not reproduced here. Instead, each cluster of rules is attributed to the *kind* of repo it came from.
 
-## Yappr
+## Repo categories
 
-- Bun workspace monorepo with strict TypeScript, ESLint/Prettier, per-package scripts, and root fanout for lint/typecheck/test.
-- `AGENTS.md` emphasizes Bun APIs, `~/` aliases, `.js` ESM extensions for intra-package imports, workspace package imports, store + thin screen UI, semantic TUI colors, and Conventional Commits.
-- `neverthrow` is used for SDK/service boundaries and persistence-facing helpers.
-- `ts-pattern` is useful for chat events, UI finite states, microphone state, and health/status unions.
+### Bun-workspace monorepo with `AGENTS.md` + strict TS
 
-## SafeURL
+- Per-package scripts (`typecheck`, `lint`, `test`) with root fanout via `bun run --filter`.
+- `AGENTS.md` carries Bun-first conventions: `Bun.file` / `Bun.$` / `bun:sqlite` over `node:`; `~/` aliases for package-local imports; `.js` ESM extensions where the runtime needs them; workspace package imports across boundaries.
+- Strict `tsconfig.base.json` (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `verbatimModuleSyntax`).
+- Biome OR ESLint+Prettier — pick one per repo and never mix.
+- Conventional Commits enforced via commitlint + husky.
 
-- Strong signal for strict monorepo checks and service-boundary `ResultAsync`.
-- Commit history repeatedly reinforces converting `Promise<Result<...>>` to `ResultAsync`, simplifying chains, and removing IIFE patterns.
+### Service / SDK boundary repo
+
+- `Promise<Result<…>>` is treated as a code-review blocker; the rule is "boundaries return `ResultAsync`".
+- Commit history repeatedly reinforces this conversion plus chain simplification (removing IIFE patterns, collapsing nested `andThen`s, dropping intermediate `await`s).
 - Core packages centralize result helpers, schemas, and shared types.
-- Security posture favors explicit validation, SSRF protection, secrets discipline, and DTO boundaries.
+- Security posture: explicit validation at every external surface, SSRF / network egress filtering where outbound HTTP is allowed, secrets read from env / config (never source), DTO mapping between persistence and API.
 
-## RecallOS
+### Knowledge / data-platform repo
 
-- `docs/RAILWAY_PATTERNS.md` explicitly separates `Result`/`ResultAsync`, `Maybe`, and `ts-pattern`.
-- `Maybe<T>` is implemented as `Result<T, None>` and used for expected absence: optional graph extraction service, missing tool call output, optional relations, cache/search misses.
-- ResultAsync chains are common across ingestion, storage, graph, and web packages.
-- Biome is the formatter/linter; the broader style should adapt to that rather than force ESLint.
+- Co-locates `Result`/`ResultAsync`, `Maybe`, and `ts-pattern` as three distinct tools with documented separation:
+  - `Result` for failable IO and parse paths.
+  - `Maybe` for expected absence (cache miss, optional relation, no-match search, polling not-ready-yet) implemented as `Result<T, None>` with helpers (`fromNullable`, `match`, `compact`, `toResult`).
+  - `ts-pattern` for exhaustive branches on owned tagged unions.
+- `ResultAsync` chains span ingestion, storage, graph, and web layers — boundaries terminate the chain via small handler-local helpers.
+- Biome is the formatter/linter — broader style adapts to Biome rather than forcing ESLint.
 
-## Printr MCP
+### MCP / tool-handler repo
 
-- Business/tool boundaries use `neverthrow`; `toToolResponseAsync()` terminates `ResultAsync` pipelines at MCP handlers.
-- SDK helpers wrap OpenAPI client responses into `Result`/`ResultAsync`.
-- `ts-pattern` is used for exhaustive matching on protocol/API payload discriminators.
-- Tool response helpers keep handler bodies small and boundary-specific.
+- Tool boundaries use `neverthrow` (or onrails-shaped equivalent) with a repo-local `toToolResponseAsync()` (or similar) terminating `ResultAsync` pipelines at the handler.
+- SDK helpers wrap OpenAPI client responses into `Result` / `ResultAsync`, never expose raw `Response`.
+- `ts-pattern` exhaustively matches protocol / API payload discriminators.
+- Handler bodies stay small; logic and validation live in `ResultAsync` chains.
 
-## re-reduced
+### Older functional / reducer-heritage repo
 
-- Older code shows the functional/reducer heritage: reducers, selectors, action creators, immutable transforms, and composition.
-- Modern repos supersede its looser historical edges with stricter no-`any`, explicit boundary validation, and `ResultAsync` pipelines.
+- Looser historical edges: reducers, selectors, action creators, immutable transforms, ad-hoc composition.
+- Modern repos supersede this with stricter no-`any`, explicit boundary validation, and `ResultAsync` pipelines. Treat the older patterns as informative but not prescriptive — when in doubt, mirror the newer repos' shape.
 
 ## Backend vs frontend (cross-repo)
 
-| Layer | Common tools | Repo notes |
-| ----- | ------------ | ---------- |
-| Backend HTTP | `Bun.serve()`, Hono | RecallOS: no Express; Yappr/Printr MCP: Hono |
-| Backend data | Drizzle, `bun:sqlite`, `Bun.sql`, `Bun.redis` | Yappr: SQLite; RecallOS: Postgres; SafeURL: Drizzle packages |
-| Frontend web | React 19, Vite, TanStack Router/Query/Start | RecallOS dashboard, Yappr desktop mainview, Printr web |
-| Frontend TUI | Ink + React, unstated stores | Yappr CLI |
-| Frontend styling | Tailwind, shadcn | Yappr desktop, SafeURL dashboard |
-| Lint | ESLint+Prettier or Biome | Yappr/SafeURL/Printr web: ESLint; RecallOS/Printr MCP: Biome |
+| Layer | Common tools |
+| ----- | ------------ |
+| Backend HTTP | `Bun.serve()`, Hono. No Express. Elysia only when already present. |
+| Backend data | `bun:sqlite`, `Bun.sql`, `Bun.redis`, Drizzle |
+| Frontend web | React 19, Vite, TanStack Router/Query/Start, shadcn + Tailwind |
+| Frontend TUI | Ink + React, lightweight stores |
+| Frontend styling | Tailwind + shadcn first; `@styled-cva/react` for typed variants |
+| Lint | Biome OR ESLint+Prettier — match the target repo, never mix |

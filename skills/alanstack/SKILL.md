@@ -52,26 +52,26 @@ Preserve each repo's stack. Do not swap frameworks unless the task is an explici
 ### Backend
 
 - **Runtime**: Bun for TS services, workers, CLIs, and MCP servers (`bun`, `bun run`, `bun test`, `bunx`).
-- **HTTP**: Prefer **`Bun.serve()`** (RecallOS-style) or **Hono** on Bun (Yappr, Printr MCP). Do not add Express. Use **Elysia** only when the repo already does (e.g. SafeURL dashboard server).
+- **HTTP**: Prefer **`Bun.serve()`** or **Hono** on Bun. Do not add Express. Use **Elysia** only when the repo already does.
 - **Platform**: **Cloudflare Workers** (Wrangler) is the default for hosted full-stack and edge APIs. Pair with **TanStack Start** for SSR or **Hono** for plain APIs.
 - **Data**: **`bun:sqlite`** / **`Bun.sql`** / **`Bun.redis`** on Bun; **Drizzle** where the repo already uses it. Avoid `pg`, `postgres.js`, and `ioredis` when Bun-native clients exist.
 - **Validation & errors**: **Zod** at IO/config/API boundaries; **`neverthrow`** `Result` / `ResultAsync` through service and handler layers.
-- **MCP handlers**: Terminate `ResultAsync` pipelines at the handler with a repo-local `toToolResponseAsync()` (Printr MCP pattern). Handler bodies stay small; logic and validation live in `ResultAsync` chains.
+- **MCP handlers**: Terminate `ResultAsync` pipelines at the handler with a repo-local `toToolResponseAsync()` (or equivalent). Handler bodies stay small; logic and validation live in `ResultAsync` chains.
 - **AI access**: Route LLM calls through **Vercel AI SDK** or **Mastra**, not direct `openai`/`@anthropic-ai/sdk` clients. Local inference goes through **Ollama**; multi-model routing through **`@openrouter/sdk`** or **`workers-ai-provider`**.
 - **Codegen**: Regenerate OpenAPI/proto clients via existing scripts; keep SDK packages thin wrappers over generated types (`openapi-typescript`, `@hey-api/openapi-ts`).
-- **Python**: Some repos pair Bun with a **FastAPI** inference or ML sidecar (Yappr). Keep Python in its package; do not move that logic into Bun unless asked.
+- **Python**: Some repos pair Bun with a **FastAPI** inference or ML sidecar. Keep Python in its package; do not move that logic into Bun unless asked.
 
 ### Frontend
 
-- **UI**: **React 19** for web and desktop webviews. **Ink + React** for terminal UIs (Yappr CLI, Memeprintr). Match the repo's router/data layer — usually **TanStack Router** and **TanStack Query**; **TanStack Start** or **TanStack Form** when already in use.
+- **UI**: **React 19** for web and desktop webviews. **Ink + React** for terminal UIs. Match the repo's router/data layer — usually **TanStack Router** and **TanStack Query**; **TanStack Start** or **TanStack Form** when already in use.
 - **State**: **`@tanstack/react-store`** for new apps; `zustand` or `unstated-next` when the repo already uses them. Do not introduce Redux, Jotai, or MobX.
-- **Build**: **Vite** for bundled web/desktop frontends. Small Bun-served HTML UIs are fine without Vite when the repo already does that (RecallOS).
+- **Build**: **Vite** for bundled web/desktop frontends. Small Bun-served HTML UIs are fine without Vite when the repo already does that.
 - **Styling & components**: **Tailwind** + **shadcn/ui** (`components.json`, `@radix-ui/*`, `lucide-react`, `sonner`, `vaul`, `cmdk`, `next-themes`). Prefer **`@styled-cva/react`** for typed variant components; fall back to the `cn` pattern (`class-variance-authority` + `clsx` + `tailwind-merge`).
 - **Animation utility**: `tw-animate-css` in new shadcn projects; `tailwindcss-animate` in older ones. Do not mix.
 - **Forms**: **`@tanstack/react-form`** for new code; keep `react-hook-form` + `@hookform/resolvers/zod` if already present.
 - **Structure**: **Store + thin screen** — keyboard handling, effects, and branching live in store/hooks; `screen.tsx` mostly composes. Use **`Record` / ordered render rules** for UI state (see Branching And Dispatch).
-- **Desktop**: **Electrobun** + typed RPC to Bun-side DB/services when the repo is split that way (Yappr desktop); do not bypass the RPC boundary from the webview.
-- **Tests**: **`bun:test`** by default; **`vitest`** (+ `@testing-library/react`, `happy-dom`) when the frontend package already uses it (RecallOS dashboard, Printr web). **Playwright** for E2E.
+- **Desktop**: When a repo is split between an Electrobun-style webview and a Bun-side process, use typed RPC across the boundary; do not bypass it from the webview.
+- **Tests**: **`bun:test`** by default; **`vitest`** (+ `@testing-library/react`, `happy-dom`) when the frontend package already uses it. **Playwright** for E2E.
 
 ## Type And Error Model
 
@@ -84,7 +84,7 @@ Preserve each repo's stack. Do not swap frameworks unless the task is an explici
 
 ## Maybe, Nullable, Result
 
-Use `Maybe<T>` for expected absence, not failure. In RecallOS it is `Result<T, None>` with helpers like `fromNullable`, `match`, `compact`, and `toResult`; copy or reuse that shape only when the repo already has or needs it.
+Use `Maybe<T>` for expected absence, not failure. A common shape is `Result<T, None>` with helpers like `fromNullable`, `match`, `compact`, and `toResult`; copy or reuse that shape only when the repo already has or needs it.
 
 - Good `Maybe` cases: cache miss, optional relationship, polling not-ready-yet, search with no match, optional service.
 - Good `Result` cases: parse failure, invalid persisted data, IO failure, API/database failure, permission/auth failure.
@@ -153,7 +153,7 @@ return rules.find((r) => r.when(state))?.render() ?? renderIdle;
 
 ## Imports And Packages
 
-- Follow repo-local alias rules. In Yappr-style packages, use `~/` for package-local source and `.js` extensions for relative/intra-package ESM imports where required.
+- Follow repo-local alias rules. A common pattern is `~/` for package-local source and `.js` extensions for relative/intra-package ESM imports where the runtime requires them.
 - Use workspace package imports for cross-package boundaries; do not deep-import private source unless that is already the repo convention.
 - Keep exports maps and generated types authoritative. Regenerate OpenAPI/proto/generated clients through existing scripts.
 

@@ -20,7 +20,7 @@ Verify the change actually does what it should. Run the repo's own scripts. Repo
 | One file in one package | `tsc --noEmit` for that package + targeted `*.spec.ts` | spec didn't exist before — add one first |
 | Multiple files, one package | package `check` script (typecheck + lint + test) | any file re-exported from the package |
 | Multiple packages | root `check` script | always |
-| Public API of a published package | root check + a downstream consumer's typecheck if reachable locally (e.g. recallos after onrails change) | always |
+| Public API of a published package | root check + a downstream consumer's typecheck if reachable locally | always |
 | `package.json` deps / lockfile | `bun install && bun check` from root | always |
 | Generated client (OpenAPI, proto) | regen via existing script, then root check | always |
 | DB schema / Drizzle migration | run migration locally + the package's integration tests + targeted handler smoke | always |
@@ -33,7 +33,7 @@ Verify the change actually does what it should. Run the repo's own scripts. Repo
 |---|---|
 | Bun workspace, single package | `bun run check` (often = typecheck + lint + test) |
 | Bun workspace, monorepo | `bun typecheck && bun lint && bun test` from root, or `bun run --filter '<scope>/*' typecheck` for one scope |
-| Python sidecar (e.g. yappr inference) | run Bun checks AND `uv run pytest` / `pytest` in the Python package |
+| Python sidecar (FastAPI / inference / ML) | run Bun checks AND `uv run pytest` / `pytest` in the Python package |
 | Frontend that already uses vitest | `bun run --filter <pkg> test` (vitest under the hood) |
 | E2E | `bun run --filter <pkg> test:e2e` or Playwright — only when the change is user-facing |
 
