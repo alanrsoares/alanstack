@@ -2,7 +2,10 @@
 
 Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, reviewing, refactoring, verifying, and committing code. Format follows the AGENTS skill spec (kebab-case dir + `SKILL.md` with `name` / `description` frontmatter) and works with any agent runtime that loads skills from `~/.agents/skills/`.
 
-> **Heads up — this is opinionated.** The rules here reflect one person's stack (Bun, Biome, neverthrow / [@onrails/result](https://github.com/alanrsoares/onrails), Zod, ts-pattern, Drizzle, TanStack, shadcn, Tailwind, `@styled-cva/react`, Vite, `bun:test`) and one person's quality bar (no `any`, no throws in business logic, no `Promise<Result<…>>`, no untyped IO, no AI attribution). It's intentionally narrow. If your stack or taste differs, **fork and adapt** — the bundle is structured so each subskill is a self-contained markdown file you can edit, replace, or drop.
+> [!IMPORTANT]
+> **This is opinionated.** The rules here reflect one person's stack — Bun, Biome, neverthrow / [@onrails/result](https://github.com/alanrsoares/onrails), Zod, ts-pattern, Drizzle, TanStack, shadcn, Tailwind, `@styled-cva/react`, Vite, `bun:test` — and one person's quality bar (no `any`, no throws in business logic, no `Promise<Result<…>>`, no untyped IO, no AI attribution).
+>
+> If your stack or taste differs, **fork and adapt**. Each subskill is a self-contained markdown file you can edit, replace, or drop.
 
 ## Skills
 
@@ -32,7 +35,8 @@ git clone https://github.com/alanrsoares/alanstack.git ~/dev/alanstack
 bash ~/dev/alanstack/scripts/install.sh
 ```
 
-Either way: edits to any SKILL.md show up in your next agent session immediately — no re-install needed. To use a custom skill dir, pass it as the first arg: `scripts/install.sh /custom/dest`.
+> [!TIP]
+> Edits to any `SKILL.md` show up in your next agent session immediately — no re-install needed. Pass a custom skill dir as the first arg: `scripts/install.sh /custom/dest`.
 
 ## Package (`.skill` archives)
 
@@ -46,7 +50,7 @@ Each archive is independently installable in any agent that consumes `.skill` zi
 
 ## Repo layout
 
-```
+```text
 ~/dev/alanstack/
 ├── README.md                                 ← this file
 ├── scripts/
@@ -80,6 +84,6 @@ Each skill is self-contained under `skills/<name>/`. The parent owns the shared 
 
 ## License
 
-The skill content reflects Alan's personal style — use freely as a starting point for your own conventions.
+[Unlicense](./UNLICENSE) — public domain. Copy, fork, modify, redistribute without attribution.
 
 Inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)'s multi-skill repo layout.
