@@ -13,16 +13,24 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 | [`alanstack-qa`](skills/alanstack-qa/SKILL.md) | Verify a change with the repo's own scripts — lint + typecheck + scoped tests. |
 | [`alanstack-commit`](skills/alanstack-commit/SKILL.md) | Conventional Commits with required scope, ≤50 char subject, no AI attribution. |
 
-## Install (live symlinks)
+## Install
+
+### One-liner (recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alanrsoares/alanstack/main/scripts/bootstrap.sh | bash
+```
+
+Clones the repo into `~/.alanstack/` and symlinks each `skills/<name>/` into `~/.agents/skills/`. Idempotent — re-running pulls latest `main` and refreshes the symlinks. Override paths with `ALANSTACK_HOME=...` and `ALANSTACK_DEST=...`.
+
+### Manual
 
 ```bash
 git clone https://github.com/alanrsoares/alanstack.git ~/dev/alanstack
 bash ~/dev/alanstack/scripts/install.sh
 ```
 
-This symlinks each `skills/<name>/` into `~/.agents/skills/<name>/`. Edits to any SKILL.md show up in your next agent session immediately — no re-install.
-
-Override the destination with `scripts/install.sh /custom/dest` if your agent reads skills from somewhere else.
+Either way: edits to any SKILL.md show up in your next agent session immediately — no re-install needed. To use a custom skill dir, pass it as the first arg: `scripts/install.sh /custom/dest`.
 
 ## Package (`.skill` archives)
 
@@ -40,6 +48,7 @@ Each archive is independently installable in any agent that consumes `.skill` zi
 ~/dev/alanstack/
 ├── README.md                                 ← this file
 ├── scripts/
+│   ├── bootstrap.sh                          ← curl-pipe one-line installer
 │   ├── install.sh                            ← symlink installer (idempotent)
 │   └── package.sh                            ← per-skill .skill builder
 └── skills/
