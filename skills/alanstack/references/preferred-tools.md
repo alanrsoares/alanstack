@@ -34,7 +34,7 @@ Each section lists:
 
 - **Default**: **`neverthrow`** (`Result` / `ResultAsync`) at service, IO, business, API, DB, and tool-handler boundaries. Migrating to **`@onrails/result`** (Alan's tagged-union alternative) where applicable.
 - **Lint**: `eslint-plugin-neverthrow` when ESLint is in use and enforcement is wanted; `@onrails/eslint-plugin` for the onrails-shaped variant.
-- **Maybe**: `Maybe<T> = Result<T, None>` for expected absence — copy that shape only when the repo already has it.
+- **Maybe**: **`@onrails/maybe`** (`Maybe<T> = Result<T, None>`) for expected absence — copy that shape only when the repo already has it.
 - **Avoid**: fp-ts, effect, purify-ts, true-myth. Do not introduce a second result library alongside neverthrow/onrails.
 
 ## Pattern Matching
@@ -81,7 +81,7 @@ Each section lists:
 ## Client State
 
 - **Default for new web apps**: **`@tanstack/react-store`**.
-- **Acceptable**: **`zustand`** in repos that already use it; **`unstated-next`** for small per-screen stores (older repos).
+- **Acceptable**: **`zustand`** in repos that already use it; **`unstated-next`** for small per-screen stores (older repos); **`@re-reduced/react`** (Alan's own reducer helper) in older reducer-heritage repos.
 - **Avoid**: Redux, MobX, Jotai, Valtio.
 
 ## HTTP Client
@@ -100,7 +100,7 @@ Each section lists:
 ## Styling
 
 - **Default**: **Tailwind CSS**.
-- **Component variants**: **`@styled-cva/react`** (Alan's own wrapper) for typed variant-driven components. Fall back to **`class-variance-authority` + `clsx` + `tailwind-merge`** (the `cn` pattern) when `@styled-cva/react` is not present.
+- **Component variants**: **`@styled-cva/react`** (Alan's own wrapper) for typed variant-driven components, paired with **`@styled-cva/biome-plugin`** when the repo lints with Biome. Fall back to **`class-variance-authority` + `clsx` + `tailwind-merge`** (the `cn` pattern) when `@styled-cva/react` is not present.
 - **Animations**: `tw-animate-css` in new shadcn projects; `tailwindcss-animate` in older ones (do not mix in the same repo).
 - **Acceptable**: `daisyui` for quick prototypes; `@pandacss/dev` only where it already lives.
 - **Avoid**: `styled-components`, `@emotion/*`, `vanilla-extract`, `unocss`.
@@ -128,10 +128,10 @@ Each section lists:
 
 ## Lint / Format
 
-- **Default for new repos (TS-only, Biome compatible)**: **Biome** (`@biomejs/biome`).
-- **Default for repos with heavy plugin needs / monorepos with shared config**: **ESLint** + **Prettier** + `@ianvs/prettier-plugin-sort-imports` + `prettier-plugin-tailwindcss`.
-- **Do not switch** an ESLint repo to Biome or vice versa unless the task is explicitly that migration.
-- **Acceptable extras**: `knip` for dead-code detection; `husky` + `lint-staged` for pre-commit.
+- **Default**: **Biome** (`@biomejs/biome`) — for all new repos, including monorepos with shared config. Prefer it over ESLint + Prettier whenever there's no existing repo to defer to.
+- **Acceptable**: **ESLint** + **Prettier** + `@ianvs/prettier-plugin-sort-imports` + `prettier-plugin-tailwindcss` only when the repo needs a specific ESLint-only plugin Biome doesn't cover, or already has one.
+- **Do not switch** an existing ESLint repo to Biome or vice versa unless the task is explicitly that migration — this default only governs greenfield choices.
+- **Acceptable extras**: `knip` for dead-code detection; `husky` + `lint-staged` for pre-commit; `pretty-quick` as a `lint-staged` alternative in Prettier-only repos.
 
 ## TypeScript Config
 
@@ -155,7 +155,7 @@ Each section lists:
 
 ## MCP
 
-- **Default**: **`@modelcontextprotocol/sdk`** for servers and clients.
+- **Default**: **`@modelcontextprotocol/sdk`** for servers and clients. Newer repos are moving to the split **`@modelcontextprotocol/client`** / **`@modelcontextprotocol/server`** v2 packages — match whichever the repo already has.
 - **Acceptable**: **`@mastra/mcp`** when already inside a Mastra agent.
 - **Pattern**: terminate `ResultAsync` pipelines at the MCP handler with a repo-local `toToolResponseAsync()` helper.
 
@@ -170,7 +170,7 @@ Each section lists:
 - **Dates**: **`date-fns`** (everywhere a date appears).
 - **Functional helpers**: **`rambda`** when a tiny FP utility helps; prefer native + small named helpers first. Do not introduce `ramda` (legacy).
 - **Shell scripting**: **`zx`** (Bun-compatible) for ad-hoc scripts; **`Bun.$`** for Bun-only.
-- **CLI prompts/parsing**: **`commander` + `inquirer`** for CLI tools.
+- **CLI prompts/parsing**: **`commander`** for arg parsing; **`@clack/prompts`** for interactive prompts (supersedes `inquirer` — no sampled repo still uses it).
 - **HTML scraping**: **`cheerio`** when scraping is genuinely needed.
 - **GitHub API**: **`@octokit/rest`**.
 - **Animation**: **`framer-motion` / `motion`** when motion is actually required; do not add for static UIs.
