@@ -131,6 +131,7 @@ Each section lists:
 - **Default**: **Biome** (`@biomejs/biome`) — for all new repos, including monorepos with shared config. Prefer it over ESLint + Prettier whenever there's no existing repo to defer to.
 - **Acceptable**: **ESLint** + **Prettier** + `@ianvs/prettier-plugin-sort-imports` + `prettier-plugin-tailwindcss` only when the repo needs a specific ESLint-only plugin Biome doesn't cover, or already has one.
 - **Do not switch** an existing ESLint repo to Biome or vice versa unless the task is explicitly that migration — this default only governs greenfield choices.
+- **Custom rules**: a **GritQL Biome plugin** (`.grit` file registered in `biome.json`) over a hand-rolled ESLint plugin, for any repo-specific rule that should stay continuously enforced. See [gritql-plugins.md](gritql-plugins.md).
 - **Acceptable extras**: `knip` for dead-code detection; `husky` + `lint-staged` for pre-commit; `pretty-quick` as a `lint-staged` alternative in Prettier-only repos.
 
 ## TypeScript Config
@@ -158,6 +159,13 @@ Each section lists:
 - **Default**: **`@modelcontextprotocol/sdk`** for servers and clients. Newer repos are moving to the split **`@modelcontextprotocol/client`** / **`@modelcontextprotocol/server`** v2 packages — match whichever the repo already has.
 - **Acceptable**: **`@mastra/mcp`** when already inside a Mastra agent.
 - **Pattern**: terminate `ResultAsync` pipelines at the MCP handler with a repo-local `toToolResponseAsync()` helper.
+
+## Codemods
+
+- **Default**: **`ts-morph`** for one-off, programmatic, repo-wide TypeScript rewrites (renames, signature changes, import rewrites) — full type information, imperative API.
+- **Acceptable**: **`jscodeshift`** only when the repo already has other codemods on it.
+- **Acceptable**: a one-time GritQL rewrite (`biome check --write --unsafe`) when the change fits Grit's pattern-match-and-replace model. See [gritql-plugins.md](gritql-plugins.md).
+- Always run on a branch, diff the result, and run full verification before committing — a codemod is a refactor at repo scale.
 
 ## Codegen And SDKs
 

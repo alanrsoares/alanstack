@@ -162,6 +162,10 @@ Use `ts-pattern` instead when matching on shape (not key) or when you want exhau
 - Don't replace `class` with a tagged union if the class already carries methods and the repo's other domain classes follow the same pattern.
 - Don't `await` a `ResultAsync` only to re-wrap. Chain with `.andThen` until the outermost boundary.
 
+## Scaling a move beyond hand-editing
+
+If a canonical move above recurs across more than a handful of files, don't hand-edit each one. See [gritql-plugins.md](../alanstack/references/gritql-plugins.md) — a GritQL Biome plugin for a rule that should stay enforced, a codemod for a one-time repo-wide rewrite. Same verification bar applies either way.
+
 ## Verification
 
 After each move:
@@ -182,3 +186,4 @@ For pure refactors, prove behavior is unchanged with the existing test suite. If
 - [alanstack-review](../alanstack-review/SKILL.md) — find the next move to make
 - [alanstack-qa](../alanstack-qa/SKILL.md) — verify the refactor
 - [alanstack-commit](../alanstack-commit/SKILL.md) — `refactor(<scope>): …` per Conventional Commits
+- [gritql-plugins.md](../alanstack/references/gritql-plugins.md) — automate a recurring move: GritQL plugin (standing rule) vs. codemod (one-time rewrite)

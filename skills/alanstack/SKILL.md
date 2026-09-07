@@ -201,6 +201,10 @@ Read `references/preferred-tools.md` when choosing a library for a purpose (HTTP
 
 Read `references/source-signals.md` only when rules conflict, when applying this skill outside the inferred source repos, or when updating the skill itself. It summarizes which source repos contributed each rule and helps resolve tradeoffs.
 
+## GritQL Plugins And Codemods
+
+Read `references/gritql-plugins.md` when a quality-bar violation or canonical refactor move recurs across many files. It distinguishes a GritQL Biome plugin (a `.grit` rule that stays enforced going forward) from a codemod (a one-time repo-wide mechanical rewrite), with config format and a confirmed-working example.
+
 ## Task subskills
 
 Specialized companions — invoke these when the task is one of these specific operations:

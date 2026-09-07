@@ -63,7 +63,8 @@ Each archive is independently installable in any agent that consumes `.skill` zi
     │   ├── SKILL.md
     │   ├── references/
     │   │   ├── preferred-tools.md
-    │   │   └── source-signals.md
+    │   │   ├── source-signals.md
+    │   │   └── gritql-plugins.md
     │   └── agents/
     │       └── openai.yaml
     ├── alanstack-review/SKILL.md
