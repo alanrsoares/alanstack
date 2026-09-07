@@ -56,7 +56,8 @@ Each archive is independently installable in any agent that consumes `.skill` zi
 ├── scripts/
 │   ├── bootstrap.sh                          ← curl-pipe one-line installer
 │   ├── install.sh                            ← symlink installer (idempotent)
-│   └── package.sh                            ← per-skill .skill builder
+│   ├── package.sh                            ← per-skill .skill builder
+│   └── derive-signals.sh                     ← reports real repo tool usage vs. preferred-tools.md
 └── skills/
     ├── alanstack/                            ← parent
     │   ├── SKILL.md

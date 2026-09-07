@@ -37,8 +37,12 @@ The rules in this skill were inferred from several private TypeScript / Bun repo
 
 ### Older functional / reducer-heritage repo
 
-- Looser historical edges: reducers, selectors, action creators, immutable transforms, ad-hoc composition.
+- Looser historical edges: reducers, selectors, action creators, immutable transforms, ad-hoc composition, sometimes via `@re-reduced/react` (Alan's own reducer helper).
 - Modern repos supersede this with stricter no-`any`, explicit boundary validation, and `ResultAsync` pipelines. Treat the older patterns as informative but not prescriptive — when in doubt, mirror the newer repos' shape.
+
+## Refreshing signals
+
+`scripts/derive-signals.sh` scans real repos' `package.json` manifests (deps, devDeps, workspace members, Bun `workspaces.catalog`) and reports actual per-category tool usage plus unmapped packages seen across multiple repos. It never edits this file or `preferred-tools.md` — it's evidence to fold in by hand when a documented default drifts from what repos actually do. Run it with no args to scan `~/dev`, or pass explicit repo paths.
 
 ## Backend vs frontend (cross-repo)
 
