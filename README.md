@@ -21,43 +21,43 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 
 ## Install
 
-### Ask your agent (copy/paste)
-
-Paste this into Claude Code, Codex or any agent that can run shell commands:
-
-```text
-Install the alanstack skill bundle from https://github.com/alanrsoares/alanstack.
-
-1. Clone it to ~/.alanstack (git pull instead if it is already there).
-2. Read scripts/install.sh, then run it. It symlinks each skills/<name>/ into
-   ~/.agents/skills/ and moves any real directory it finds there to a .bak-* copy.
-3. If my agent reads skills from another directory (Claude Code: ~/.claude/skills),
-   add a symlink there for each skill that points at the one in ~/.agents/skills/.
-   Do not overwrite a real directory; tell me about it instead.
-4. Check: list the symlinks with ls -l and confirm each target has a SKILL.md.
-5. Report which skills are installed, which directories were backed up, and anything
-   you skipped. Do not edit my CLAUDE.md, AGENTS.md or settings.
-```
-
-It runs the same installer as the manual steps below, so you can read what it will do first.
-
-### One-liner (recommended)
+Uses the [`skills`](https://skills.sh/) CLI, which finds every `skills/<name>/` in this repo and installs it for the agents on your machine.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alanrsoares/alanstack/main/scripts/bootstrap.sh | bash
+npx skills add alanrsoares/alanstack        # or: bunx skills add alanrsoares/alanstack
 ```
 
-Clones the repo into `~/.alanstack/` and symlinks each `skills/<name>/` into `~/.agents/skills/`. Idempotent — re-running pulls latest `main` and refreshes the symlinks. Override paths with `ALANSTACK_HOME=...` and `ALANSTACK_DEST=...`.
+| Want | Flag |
+|------|------|
+| User-level, not just this project | `-g` |
+| Only some skills | `-s alanstack -s alanstack-commit` |
+| Only some agents | `-a claude-code` |
+| See what is in the repo first | `-l` |
+| No prompts | `-y` |
 
-### Manual
+Update with `npx skills update`, remove with `npx skills remove`.
+
+### Ask your agent (copy/paste)
+
+```text
+Install the alanstack skills with the skills CLI.
+
+1. Run `npx skills add alanrsoares/alanstack --list` (use `bunx` if npx is missing)
+   and show me the skills it finds.
+2. Install all of them at user level: `npx skills add alanrsoares/alanstack -g -y`.
+3. Check with `npx skills list -g` that each one is installed.
+4. Report which skills were installed for which agents, and anything that failed
+   or was skipped. Do not edit my CLAUDE.md, AGENTS.md or settings.
+```
+
+### Work on the skills locally
 
 ```bash
 git clone https://github.com/alanrsoares/alanstack.git ~/dev/alanstack
 bash ~/dev/alanstack/scripts/install.sh
 ```
 
-> [!TIP]
-> Edits to any `SKILL.md` show up in your next agent session immediately — no re-install needed. Pass a custom skill dir as the first arg: `scripts/install.sh /custom/dest`.
+Symlinks each skill into `~/.agents/skills/`, so edits to a `SKILL.md` show up in your next agent session with no re-install. Pass another directory as the first argument. A real directory already there is moved to a `.bak-*` copy.
 
 ## Package (`.skill` archives)
 
@@ -75,7 +75,7 @@ Each archive is independently installable in any agent that consumes `.skill` zi
 ~/dev/alanstack/
 ├── README.md                                 ← this file
 ├── scripts/
-│   ├── bootstrap.sh                          ← curl-pipe one-line installer
+│   ├── bootstrap.sh                          ← legacy curl-pipe installer; prefer `npx skills add`
 │   ├── install.sh                            ← symlink installer (idempotent)
 │   ├── package.sh                            ← per-skill .skill builder
 │   └── derive-signals.sh                     ← reports real repo tool usage vs. preferred-tools.md
