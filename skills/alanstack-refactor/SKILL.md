@@ -1,6 +1,6 @@
 ---
 name: alanstack-refactor
-description: "Apply Alan's canonical TypeScript refactors: Promise<Result> → ResultAsync, switch/if chains over owned unions → ts-pattern .exhaustive(), repeated null checks → Maybe + match, throws → boundary-wrapped Result, untyped IO → Zod, inline object types → named types, IIFEs → named helpers. Use when user says 'refactor this', 'tighten this', 'alanstack-ify', '/alanstack-refactor', or when a review (alanstack-review) recommended a specific refactor move."
+description: "Apply Alan's canonical TypeScript refactors: Promise<Result> → ResultAsync, switch chains → ts-pattern, null checks → Maybe, throws → Result, untyped IO → Zod, inline object types → named types. Use for 'refactor this', 'tighten this', 'alanstack-ify', '/alanstack-refactor', or a review's recommended refactor move."
 ---
 
 Apply Alan's canonical refactors. One move at a time. Show the diff. Verify behavior is unchanged via the repo's tests.
@@ -86,11 +86,14 @@ Throws are allowed **only** inside the wrapper that produces a Result. Hidden th
 - }
 + export function parseConfig(raw: string): Result<Config, ConfigError> {
 +   return trySync(() => JSON.parse(raw), () => ({ kind: "json" as const }))
-+     .andThen((data) => ConfigSchema.safeParse(data).success
-+       ? ok(data as Config)
-+       : err({ kind: "schema" as const }));
++     .andThen((data) => {
++       const parsed = ConfigSchema.safeParse(data);
++       return parsed.success ? ok(parsed.data) : err({ kind: "schema" as const });
++     });
 + }
 ```
+
+`parsed.data` is typed by the schema; do not cast.
 
 ### Untyped IO → Zod parse at the boundary
 
@@ -180,10 +183,4 @@ If the refactor touches a shared module, broaden to `bun typecheck && bun lint &
 
 For pure refactors, prove behavior is unchanged with the existing test suite. If no test covers the path, add a `.spec.ts` for the before-state first, then refactor.
 
-## Companion skills
-
-- [alanstack](../alanstack/SKILL.md) — full principles
-- [alanstack-review](../alanstack-review/SKILL.md) — find the next move to make
-- [alanstack-qa](../alanstack-qa/SKILL.md) — verify the refactor
-- [alanstack-commit](../alanstack-commit/SKILL.md) — `refactor(<scope>): …` per Conventional Commits
-- [gritql-plugins.md](../alanstack/references/gritql-plugins.md) — automate a recurring move: GritQL plugin (standing rule) vs. codemod (one-time rewrite)
+Principles: [alanstack](../alanstack/SKILL.md).

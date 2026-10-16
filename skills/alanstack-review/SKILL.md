@@ -1,6 +1,6 @@
 ---
 name: alanstack-review
-description: "Review a TypeScript diff against Alan's quality bar: neverthrow Result/ResultAsync at boundaries, ts-pattern exhaustiveness over owned unions, Zod at IO, Maybe for expected absence, no any / no throws / no Promise<Result>. One line per finding (location, problem, fix). Use when user says 'review this', 'alanstack review', '/alanstack-review', when reviewing a PR or staged diff in a Bun + TypeScript repo, or asks to audit code style."
+description: "Review a TypeScript diff against Alan's quality bar (Result/ResultAsync, ts-pattern, Zod at IO, no any, no throws). One line per finding: location, problem, fix. Use for 'review this', 'alanstack review', '/alanstack-review', a PR or staged diff in a Bun + TypeScript repo, or a code-style audit."
 ---
 
 Review against the alanstack quality bar. One line per finding. Location, problem, fix. No filler.
@@ -76,9 +76,4 @@ L42: I noticed there's a throw here — you might want to consider using neverth
 - For rules that conflict between source repos, consult [references/source-signals.md](../alanstack/references/source-signals.md).
 - For repo-local exceptions, read the target repo's `AGENTS.md` and neighboring files first — local rules override these defaults.
 
-## Companion skills
-
-- [alanstack](../alanstack/SKILL.md) — full principles reference
-- [alanstack-refactor](../alanstack-refactor/SKILL.md) — apply the suggested fixes
-- [alanstack-qa](../alanstack-qa/SKILL.md) — verify the diff before/after
-- [alanstack-commit](../alanstack-commit/SKILL.md) — Conventional Commits per Alan's rules
+Principles: [alanstack](../alanstack/SKILL.md).

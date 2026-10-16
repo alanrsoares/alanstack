@@ -1,6 +1,6 @@
 ---
 name: alanstack-qa
-description: "Verify a change against the repo's own scripts: lint + typecheck + smallest relevant tests, broadened when touching shared behavior. Reads package.json scripts, fans out filtered in Bun workspaces, reports what ran and what changed. Use when user says 'verify', 'qa this', 'run check', 'test it', '/alanstack-qa', or after coding work needs proof of correctness before commit/PR."
+description: "Verify a change with the repo's own scripts: lint + typecheck + smallest relevant tests, broadened for shared behavior. Use for 'verify', 'qa this', 'run check', 'test it', '/alanstack-qa', or when coding work needs proof before commit/PR."
 ---
 
 Verify the change actually does what it should. Run the repo's own scripts. Report what ran, what failed, what changed.
@@ -77,9 +77,4 @@ verdict: typecheck + tests green. Browser verification not run — feature is UI
 - Don't run destructive scripts (`db:wipe`, `clean`, `reset`) as part of verification.
 - Don't conclude success from a typecheck alone for UI-visible or HTTP-route changes — exercise the path.
 
-## Companion skills
-
-- [alanstack](../alanstack/SKILL.md) — full principles
-- [alanstack-review](../alanstack-review/SKILL.md) — find issues before running tests
-- [alanstack-refactor](../alanstack-refactor/SKILL.md) — moves to apply when QA flags a violation
-- [alanstack-commit](../alanstack-commit/SKILL.md) — once QA is green
+Principles: [alanstack](../alanstack/SKILL.md).

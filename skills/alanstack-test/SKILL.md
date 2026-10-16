@@ -1,6 +1,6 @@
 ---
 name: alanstack-test
-description: "Write tests in Alan's TypeScript/Bun style: bun:test for runtime, ts-expect (TypeEqual + expectType) for compile-time types, fast-check for laws and invariants, it.each / describe.each for closed enumerable branches, plain it for one-offs and regressions. No mocks for the lib's own functions. *.spec.ts under packages/<pkg>/test/. tsconfig.json must include test files. Use when user says 'write a test', 'add a spec', 'test this', '/alanstack-test', when adding behavior that needs coverage, when fixing a bug that needs a regression test, or asks how to test a Result/Maybe/match pipeline."
+description: "Write tests in Alan's TypeScript/Bun style: bun:test, ts-expect for types, fast-check for laws, it.each for closed branches, no mocks for first-party code. Use for 'write a test', 'add a spec', 'test this', '/alanstack-test', new behavior needing coverage, regression tests, or testing Result/Maybe/match pipelines."
 ---
 
 Write tests at the right layer. Pick the right tool: types, properties, table, or plain. No mocks for first-party code.
@@ -189,10 +189,4 @@ When a third-party function appears in the test:
 
 Hand off to [alanstack-qa](../alanstack-qa/SKILL.md) for the run sequence: typecheck (so `types.spec.ts` actually checks), then `bun test <path>`. Don't claim "tests pass" without showing the count and any skipped/failed lines.
 
-## Companion skills
-
-- [alanstack](../alanstack/SKILL.md) — full principles, including the type/error model your tests assert on
-- [alanstack-review](../alanstack-review/SKILL.md) — flags missing tests for behavior changes
-- [alanstack-refactor](../alanstack-refactor/SKILL.md) — refactors that need a "before" test added first
-- [alanstack-qa](../alanstack-qa/SKILL.md) — running the tests, not writing them
-- [alanstack-commit](../alanstack-commit/SKILL.md) — `test(<scope>): …` per Conventional Commits
+Principles: [alanstack](../alanstack/SKILL.md).
