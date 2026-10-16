@@ -160,6 +160,25 @@ Reach for plain `it` when:
 - Setup is bespoke (file fixtures, multi-step state).
 - Behavior crosses package boundaries and you're testing the seam.
 
+## Round-trip and conformance fixtures
+
+Use this for a parser, a codec, or any load-and-save path.
+
+- Keep real samples as fixture files. Test that load then save returns the input. State if you compare byte for byte or after normalisation.
+- Keep invalid fixtures too. Give each one an expected error kind. A parser that rejects a fixture for the wrong reason must fail the test.
+- Run the fixtures with `it.each` over the file list. Name each case by its file.
+- Add a fixture for each bug before you fix it.
+- Test that data the editor does not model survives load and save. Unknown attributes are the usual loss.
+- When the grammar has a fixed set of forms, add a `fast-check` generator. Keep the fixtures for samples from the real world.
+
+```ts
+const files = readdirSync(dir).filter((f) => f.endsWith(".xml"));
+it.each(files)("round-trips %s", (file) => {
+  const input = readFileSync(join(dir, file), "utf8");
+  expect(roundTrip(input)).toBe(input); // roundTrip = decode then encode, a local helper
+});
+```
+
 ## No mocks for first-party code
 
 If the function under test is in this repo, **do not mock it**. Compose the real thing. The library has no IO to stub.

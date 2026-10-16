@@ -128,11 +128,12 @@ Don't combine unrelated changes under one commit; split them.
 
 ## Workflow
 
-1. `git status --short` — see what's staged.
-2. `git diff --staged` — read the actual diff, not what you remember writing.
-3. Pick scope from the touched package(s).
-4. Subject in imperative present, ≤ 50 chars.
-5. Body only if "why" is non-obvious.
-6. **Never** `--no-verify`, **never** `--no-gpg-sign`, **never** `-c commit.gpgsign=false` unless the user explicitly asked.
+1. Run `git config user.email`. In a personal public repo it must be your personal address, not a work address. Set it for the repo with `git config user.email <address>`, not `--global`.
+2. `git status --short` — see what's staged.
+3. `git diff --staged` — read the actual diff, not what you remember writing.
+4. Pick scope from the touched package(s).
+5. Subject in imperative present, ≤ 50 chars.
+6. Body only if "why" is non-obvious.
+7. **Never** `--no-verify`, **never** `--no-gpg-sign`, **never** `-c commit.gpgsign=false` unless the user explicitly asked.
 
 Principles: [alanstack](../alanstack/SKILL.md).
