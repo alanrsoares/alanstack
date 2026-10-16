@@ -19,7 +19,7 @@ Write commits terse and exact. Conventional Commits with required scope. No fluf
 
 **Subject line:**
 - `<type>(<scope>): <imperative summary>`
-- **Scope is required.** Match the touched package, monorepo workspace, or domain area.
+- **Always give a scope.** Use the touched package, monorepo workspace, or domain area.
 - Imperative present tense: `add`, `fix`, `migrate`, **not** `added`, `fixes`, `migrated`.
 - ≤ 50 chars total. No period.
 - Lowercase after the colon, unless quoting a proper noun, file path, or identifier.

@@ -10,11 +10,11 @@ Write tests at the right layer. Pick the right tool: types, properties, table, o
 | Layer | Tool | When |
 |------|------|------|
 | Compile-time types | `ts-expect` (`TypeEqual`, `expectType`) | Public type surface — inferred Ok/Err types, type predicates, alias equality, function-signature shape |
-| Runtime laws / invariants | `bun:test` + `fast-check` | Algebraic laws (functor, monad), round-trips, idempotence, commutativity — any property that holds across a space of inputs |
+| Runtime laws / invariants | `bun:test` + `fast-check` | Algebraic laws (functor, monad), round-trips, idempotence, commutativity. Any property that holds for a whole space of inputs |
 | Runtime closed branches | `bun:test` + `it.each` / `describe.each` | Format/serialisation rules, status mapping, primitive dispatch, falsy-value handling — finite enumerable cases |
 | Runtime one-offs | `bun:test` plain `it` | Integration cases that don't generalise, regression tests for a specific bug, scenarios with bespoke setup |
 
-When in doubt: if the test reads "for all `x : X` it holds that ..." use `fast-check`; if it reads "for each of these N cases ..." use `it.each`; otherwise plain `it`.
+When in doubt: if the test reads "for all `x : X` it holds that ...", use `fast-check`. If it reads "for each of these N cases ...", use `it.each`. Otherwise use plain `it`.
 
 ## File layout
 
@@ -168,7 +168,7 @@ When a third-party function appears in the test:
 
 - Pure → call it for real.
 - IO with a deterministic alternative (`bun:sqlite` in-memory, `tmpdir`) → use the real client against the alternative.
-- IO with no deterministic alternative (network, real DB, real LLM) → push it behind a thin adapter the test can pass a fake to, OR mark the test as integration / smoke and gate it.
+- IO with no deterministic alternative (network, real DB, real LLM): put it behind a thin adapter, so the test can pass a fake. Or mark the test as integration / smoke and gate it.
 
 `bun:test` has no built-in `jest.mock`. Use dependency injection (pass the dependency as an argument) over module-level patching. If a repo already uses `mock.module()`, match the convention but minimise scope.
 
@@ -176,9 +176,9 @@ When a third-party function appears in the test:
 
 - Behavior changes need a test. Compat / shim changes extend the conformance spec for that surface (e.g. `packages/result/test/neverthrow-conformance.spec.ts`).
 - Pure refactors don't need new tests if the existing suite covers the path. Add one **before** the refactor if no test does.
-- A regression-test commit should reference the fix in the test name or a brief comment — future readers should be able to find the bug from the test.
+- A regression-test commit must name the fix in the test name or a short comment. Then a reader can find the bug from the test.
 
-## What `*.spec.ts` is allowed to do that `src/` isn't
+## What `*.spec.ts` can do that `src/` cannot
 
 - `any` — biome's `noExplicitAny` is `off` for spec files (needed to wire `fast-check` arbitraries cleanly).
 - `_unsafeUnwrap` / `_unsafeUnwrapErr` in compat layers — allowed in tests, blocked everywhere else by `@onrails/eslint-plugin`.

@@ -3,7 +3,7 @@
 Two different automation tools for two different jobs. Don't reach for a codemod when a plugin will do, and don't hand-edit a pattern that recurs across the repo.
 
 - **GritQL Biome plugin** — a `.grit` rule registered in `biome.json`, runs on every lint (CI, editor, pre-commit). Use for a **quality-bar rule that should stay enforced going forward** — the pattern must never come back.
-- **Codemod** — a one-off script that rewrites the repo once. Use for a **mechanical migration** (renaming an API, converting a call pattern repo-wide) that doesn't need continuous enforcement after it lands.
+- **Codemod** — a one-off script that rewrites the repo once. Use it for a **mechanical migration**, such as renaming an API or converting a call pattern repo-wide. The change needs no enforcement after it lands.
 
 ## GritQL plugins
 
@@ -26,7 +26,7 @@ Convention: keep plugin files under `biome/plugins/<rule-name>.grit` in the targ
 - `` `code snippet` `` with `$name` captures a pattern; `as $binding` names the whole match; `where { ... }` attaches conditions and actions.
 - `register_diagnostic(span, message, severity, fix_kind)` reports a finding. `severity` is `hint | info | warn | error`.
 - `$match => \`replacement\`` supplies a rewrite. `fix_kind = "safe"` lets `biome check --write` apply it automatically; omit or mark `"unsafe"` to require `--write --unsafe`. No `fix_kind` on a rewrite defaults to unsafe.
-- Diagnostic-only plugins (no rewrite) are the common case — most of the quality bar is easier to flag than to auto-fix correctly.
+- Most plugins only report (no rewrite). The quality bar is easier to flag than to fix automatically.
 
 **Working example** (from Biome's docs) — enforces the quality bar's "no `any`" rule:
 
@@ -56,4 +56,4 @@ Full syntax reference: [biomejs.dev/reference/gritql](https://biomejs.dev/refere
 
 Defaults (`ts-morph`, `jscodeshift`): see [preferred-tools.md#codemods](preferred-tools.md#codemods).
 
-For a one-time rewrite that fits Grit's pattern-match-and-replace model, run a `.grit` rule once via `biome check --write --unsafe <path>`, then delete it unless it's also worth keeping as a standing rule. Run any codemod on a branch, diff the result, and verify with [`alanstack-qa`](../../alanstack-qa/SKILL.md) before committing — repo-scale automation gets the same "prove behavior is unchanged" bar as a hand-written refactor.
+For a one-time rewrite that fits Grit's pattern-match-and-replace model, run a `.grit` rule once with `biome check --write --unsafe <path>`. Then delete the rule, unless you want to keep it as a standing rule. Run each codemod on a branch. Diff the result. Verify it with [`alanstack-qa`](../../alanstack-qa/SKILL.md) before you commit. A repo-wide rewrite needs the same proof as a hand-written refactor: the behavior did not change.

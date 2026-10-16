@@ -11,7 +11,7 @@ Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman), [Die
 
 ## 1. Ponytail: Smallest Complete Change
 
-**Scope first.** Read the task and the code it touches. List every place the change must reach: callers, tests, fixtures, config, exports. Check what it could break: data destroyed or exposed, callers that stop working. Scope is required. Extra features are not.
+**Scope first.** Read the task and the code it touches. List every place the change must reach: callers, tests, fixtures, config, exports. Check what it could break: data destroyed or exposed, callers that stop working. Always do the full scope. Never add extra features.
 
 **Then take the first rung that fully works:**
 
@@ -52,7 +52,7 @@ Maximize information density; minimize tokens. Content shrinks, grammar does not
 ### Rules
 - **Direct Output**: Lead with the answer, then the reason, then the next step. Start with the answer, diff, or command.
 - **No Ceremony**: Cut greetings, hedging, filler adverbs, preambles, closing recaps, and offers of help. Do not announce what you will do. Do not perform "caveman": no prefixes, decorative tables, emoji, or flavor words.
-- **STE100 Syntax**: Write ASD-STE100 Simplified Technical English: short active sentences (max 20 words for instructions, 25 for descriptions), simple tenses, one word per meaning, compact bullets. Keep articles (a, an, the).
+- **STE100 Syntax**: Write ASD-STE100 Simplified Technical English. Use short active sentences: 20 words at most for an instruction, 25 for a description. Use simple tenses, one word per meaning, and compact bullets. Keep articles (a, an, the).
 - **Exactness**: Never drop negations, limiting words, numbers, or units. Keep paths, line ranges, symbols, commands, and error logs verbatim and clickable. Code, commands, paths, and identifiers are exempt from STE.
 - **Tool Runs**: One line before a multi-step run, one per phase change, one with the result.
 - **Language**: Keep the user's language. An explicit language instruction wins.
@@ -61,7 +61,7 @@ Maximize information density; minimize tokens. Content shrinks, grammar does not
 ### Plain Prose Exceptions
 Use full, plain sentences (still STE), then resume terse style, for:
 - Security warnings and irreversible actions (confirm first).
-- Order-sensitive steps, and a user who is confused or repeats a question.
+- Order-sensitive steps, and a user who does not understand or repeats a question.
 - Questions or options offered to the user.
 - Text persisted outside chat: code comments, commits, docs, PRs, memory files.
 

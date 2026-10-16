@@ -1,29 +1,29 @@
 # Source Signals
 
-The rules in this skill were inferred from several private TypeScript / Bun repos spanning desktop, terminal, web, MCP/SDK, and inference-sidecar surfaces. The repo names are intentionally not reproduced here. Instead, each cluster of rules is attributed to the *kind* of repo it came from.
+The rules in this skill come from several private TypeScript / Bun repos: desktop, terminal, web, MCP/SDK, and inference-sidecar surfaces. The repo names are not given here. Each cluster of rules names the *kind* of repo it came from.
 
 ## Repo categories
 
 ### Bun-workspace monorepo with `AGENTS.md` + strict TS
 
 - Per-package scripts (`typecheck`, `lint`, `test`) with root fanout via `bun run --filter`.
-- `AGENTS.md` carries Bun-first conventions: `Bun.file` / `Bun.$` / `bun:sqlite` over `node:`; `~/` aliases for package-local imports; `.js` ESM extensions where the runtime needs them; workspace package imports across boundaries.
+- `AGENTS.md` gives Bun-first conventions. Use `Bun.file` / `Bun.$` / `bun:sqlite` over `node:`. Use `~/` aliases for package-local imports. Use `.js` ESM extensions where the runtime needs them. Use workspace package imports across boundaries.
 - Strict `tsconfig.base.json` (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `verbatimModuleSyntax`).
 - Biome OR ESLint+Prettier — pick one per repo and never mix.
 - Conventional Commits enforced via commitlint + husky.
 
 ### Service / SDK boundary repo
 
-- `Promise<Result<…>>` is treated as a code-review blocker; the rule is "boundaries return `ResultAsync`".
+- A code review blocks `Promise<Result<…>>`. The rule: boundaries return `ResultAsync`.
 - Commit history repeatedly reinforces this conversion plus chain simplification (removing IIFE patterns, collapsing nested `andThen`s, dropping intermediate `await`s).
 - Core packages centralize result helpers, schemas, and shared types.
-- Security posture: explicit validation at every external surface, SSRF / network egress filtering where outbound HTTP is allowed, secrets read from env / config (never source), DTO mapping between persistence and API.
+- Security posture: validate at every external surface. Filter SSRF / network egress where the code makes outbound HTTP calls. Read secrets from env / config, never from source. Map DTOs between persistence and API.
 
 ### Knowledge / data-platform repo
 
 - Co-locates `Result`/`ResultAsync`, `Maybe`, and `ts-pattern` as three distinct tools with documented separation:
   - `Result` for failable IO and parse paths.
-  - `Maybe` for expected absence (cache miss, optional relation, no-match search, polling not-ready-yet) implemented as `Result<T, None>` with helpers (`fromNullable`, `match`, `compact`, `toResult`).
+  - Use `Maybe` for expected absence (cache miss, optional relation, no-match search, polling not-ready-yet). It is `Result<T, None>` with helpers (`fromNullable`, `match`, `compact`, `toResult`).
   - `ts-pattern` for exhaustive branches on owned tagged unions.
 - `ResultAsync` chains span ingestion, storage, graph, and web layers — boundaries terminate the chain via small handler-local helpers.
 - Biome is the formatter/linter — broader style adapts to Biome rather than forcing ESLint.
@@ -42,7 +42,7 @@ The rules in this skill were inferred from several private TypeScript / Bun repo
 
 ## Refreshing signals
 
-`scripts/derive-signals.sh` scans real repos' `package.json` manifests (deps, devDeps, workspace members, Bun `workspaces.catalog`) and reports actual per-category tool usage plus unmapped packages seen across multiple repos. It never edits this file or `preferred-tools.md` — it's evidence to fold in by hand when a documented default drifts from what repos actually do. Run it with no args to scan `~/dev`, or pass explicit repo paths.
+`scripts/derive-signals.sh` scans the `package.json` manifests of real repos (deps, devDeps, workspace members, Bun `workspaces.catalog`). It reports the actual tool use per category, and the unmapped packages that appear in several repos. It never edits this file or `preferred-tools.md`. Use its output as evidence: fold it in by hand when a documented default no longer matches what repos do. Run it with no arguments to scan `~/dev`, or give it repo paths.
 
 ## Backend vs frontend (cross-repo)
 

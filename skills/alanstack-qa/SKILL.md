@@ -9,7 +9,7 @@ Verify the change actually does what it should. Run the repo's own scripts. Repo
 
 1. **Identify scope.** What files changed (`git status --short`, `git diff --name-only`). Which package(s) own them.
 2. **Read the repo's scripts.** `package.json` at root and at each touched package. Use the repo's actual `typecheck` / `lint` / `test` / `check` names; do not invent commands.
-3. **Run the narrowest relevant suite first.** Touched one package? `bun run --filter <pkg> typecheck && bun run --filter <pkg> lint && bun test <pkg-path>`. Don't run the entire monorepo unless the change is shared.
+3. **Run the narrowest relevant suite first.** One package changed? `bun run --filter <pkg> typecheck && bun run --filter <pkg> lint && bun test <pkg-path>`. Run the full monorepo only for a shared change.
 4. **Broaden when needed.** Shared module, generated client, db migration, public API, lockfile change → run root-level `bun check` (or its equivalent).
 5. **Report concrete results.** Pass/fail per step, test counts, any unexpected output. Don't claim "working" without evidence.
 
@@ -24,7 +24,7 @@ Verify the change actually does what it should. Run the repo's own scripts. Repo
 | `package.json` deps / lockfile | `bun install && bun check` from root | always |
 | Generated client (OpenAPI, proto) | regen via existing script, then root check | always |
 | DB schema / Drizzle migration | run migration locally + the package's integration tests + targeted handler smoke | always |
-| Bun.serve / Hono route | start the dev server, hit the route, verify response shape — **do not** claim done from typecheck alone | always |
+| Bun.serve / Hono route | start the dev server, call the route, check the response shape. **Do not** claim done from typecheck alone | always |
 | Frontend visible behavior | start dev server, exercise the path in the browser, screenshot when relevant — typecheck/tests do not prove UX | always |
 
 ## Patterns Alan's repos use
@@ -61,7 +61,7 @@ qa: @onrails/result
 verdict: needs fix in src/compat/neverthrow.ts:259
 ```
 
-When manual UI / server verification is required and not run, **say so explicitly**:
+When the change needs a manual UI / server check and you did not run it, **say so explicitly**:
 
 ```
 verdict: typecheck + tests green. Browser verification not run — feature is UI-visible; cannot claim done from this layer.

@@ -1,9 +1,9 @@
 # alanstack
 
-Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, reviewing, refactoring, verifying, and committing code. Format follows the AGENTS skill spec (kebab-case dir + `SKILL.md` with `name` / `description` frontmatter) and works with any agent runtime that loads skills from `~/.agents/skills/`.
+Multi-skill bundle that applies Alan's TypeScript / Bun style when you write, review, refactor, verify, and commit code. The format follows the AGENTS skill specification: a kebab-case directory with a `SKILL.md` file that has `name` and `description` frontmatter. It works with any agent that loads skills from `~/.agents/skills/`.
 
 > [!IMPORTANT]
-> **This is opinionated.** The rules here reflect one person's stack — Bun, Biome, neverthrow / [@onrails/result](https://github.com/alanrsoares/onrails), Zod, ts-pattern, Drizzle, TanStack, shadcn, Tailwind, `@styled-cva/react`, Vite, `bun:test` — and one person's quality bar (no `any`, no throws in business logic, no `Promise<Result<…>>`, no untyped IO, no AI attribution).
+> **This bundle has strong opinions.** The rules show one person's stack: Bun, Biome, neverthrow / [@onrails/result](https://github.com/alanrsoares/onrails), Zod, ts-pattern, Drizzle, TanStack, shadcn, Tailwind, `@styled-cva/react`, Vite, `bun:test`. They also show one person's quality bar: no `any`, no throws in business logic, no `Promise<Result<…>>`, no untyped IO, no AI attribution.
 >
 > If your stack or taste differs, **fork and adapt**. Each subskill is a self-contained markdown file you can edit, replace, or drop.
 
@@ -21,7 +21,7 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 
 ## Install
 
-Uses the [`skills`](https://skills.sh/) CLI, which finds every `skills/<name>/` in this repo and installs it for the agents on your machine.
+The [`skills`](https://skills.sh/) CLI finds each `skills/<name>/` in this repo. It installs the skills for the agents on your machine.
 
 ```bash
 npx skills add alanrsoares/alanstack        # or: bunx skills add alanrsoares/alanstack
@@ -45,9 +45,9 @@ Install the alanstack skills with the skills CLI.
 1. Run `npx skills add alanrsoares/alanstack --list` (use `bunx` if npx is missing)
    and show me the skills it finds.
 2. Install all of them at user level: `npx skills add alanrsoares/alanstack -g -y`.
-3. Check with `npx skills list -g` that each one is installed.
-4. Report which skills were installed for which agents, and anything that failed
-   or was skipped. Do not edit my CLAUDE.md, AGENTS.md or settings.
+3. Run `npx skills list -g`. Check that each skill is in the list.
+4. Tell me which skills you installed, and for which agents. Tell me about each
+   failure and each skill you skipped. Do not edit my CLAUDE.md, AGENTS.md or settings.
 ```
 
 ### Work on the skills locally
@@ -57,7 +57,7 @@ git clone https://github.com/alanrsoares/alanstack.git ~/dev/alanstack
 bash ~/dev/alanstack/scripts/install.sh
 ```
 
-Symlinks each skill into `~/.agents/skills/`, so edits to a `SKILL.md` show up in your next agent session with no re-install. Pass another directory as the first argument. A real directory already there is moved to a `.bak-*` copy.
+The script symlinks each skill into `~/.agents/skills/`. When you edit a `SKILL.md`, the change shows in your next agent session. You do not need to install again. To use another directory, give it as the first argument. If a real directory is already there, the script moves it to a `.bak-*` copy.
 
 ## Package (`.skill` archives)
 

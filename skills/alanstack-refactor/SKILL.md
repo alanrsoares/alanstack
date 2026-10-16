@@ -3,7 +3,7 @@ name: alanstack-refactor
 description: "Apply Alan's canonical TypeScript refactors: Promise<Result> → ResultAsync, switch chains → ts-pattern, null checks → Maybe, throws → Result, untyped IO → Zod, inline object types → named types. Use for 'refactor this', 'tighten this', 'alanstack-ify', '/alanstack-refactor', or a review's recommended refactor move."
 ---
 
-Apply Alan's canonical refactors. One move at a time. Show the diff. Verify behavior is unchanged via the repo's tests.
+Apply Alan's canonical refactors. Make one move at a time. Show the diff. Run the repo's tests to verify that the behavior did not change.
 
 ## Operating loop
 
@@ -76,7 +76,7 @@ Or, when absence becomes a failure at the next boundary:
 
 ### Throws in business logic → boundary-wrapped Result
 
-Throws are allowed **only** inside the wrapper that produces a Result. Hidden throws inside `service.ts` / `handler.ts` violate the quality bar.
+Put throws **only** inside the wrapper that produces a Result. A hidden throw inside `service.ts` / `handler.ts` breaks the quality bar.
 
 ```diff
 - export function parseConfig(raw: string): Config {
@@ -93,7 +93,7 @@ Throws are allowed **only** inside the wrapper that produces a Result. Hidden th
 + }
 ```
 
-`parsed.data` is typed by the schema; do not cast.
+The schema types `parsed.data`. Do not cast.
 
 ### Untyped IO → Zod parse at the boundary
 
@@ -162,12 +162,12 @@ Use `ts-pattern` instead when matching on shape (not key) or when you want exhau
 - Don't convert `Maybe.none()` to throw; if absence is a failure, convert to `Result` first.
 - Don't introduce `Maybe` for one isolated `??` fallback. Keep it as `??`.
 - Don't introduce `ts-pattern` for `if (x == null)` or two-branch booleans.
-- Don't replace `class` with a tagged union if the class already carries methods and the repo's other domain classes follow the same pattern.
+- Keep a `class` that has methods. Do not replace it with a tagged union if the other domain classes in the repo are also classes.
 - Don't `await` a `ResultAsync` only to re-wrap. Chain with `.andThen` until the outermost boundary.
 
 ## Scaling a move beyond hand-editing
 
-If a canonical move above recurs across more than a handful of files, don't hand-edit each one. See [gritql-plugins.md](../alanstack/references/gritql-plugins.md) — a GritQL Biome plugin for a rule that should stay enforced, a codemod for a one-time repo-wide rewrite. Same verification bar applies either way.
+If a canonical move recurs in more than a few files, do not edit each file by hand. Read [gritql-plugins.md](../alanstack/references/gritql-plugins.md). A GritQL Biome plugin keeps a rule enforced. A codemod rewrites the whole repo one time. The same verification bar applies to both.
 
 ## Verification
 
@@ -181,6 +181,6 @@ bun test <path/to/spec>
 
 If the refactor touches a shared module, broaden to `bun typecheck && bun lint && bun test` from the repo root.
 
-For pure refactors, prove behavior is unchanged with the existing test suite. If no test covers the path, add a `.spec.ts` for the before-state first, then refactor.
+For a pure refactor, prove that the behavior did not change: run the existing test suite. If no test covers the path, first add a `.spec.ts` for the before-state. Then refactor.
 
 Principles: [alanstack](../alanstack/SKILL.md).

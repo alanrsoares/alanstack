@@ -10,7 +10,7 @@ Make code feel native to Alan's TypeScript projects. Repository instructions sti
 ## Operating Loop
 
 1. Read local context first: `AGENTS.md`, `package.json`, tool configs, and neighboring files.
-2. Preserve the repo's chosen tools. Do not replace ESLint with Biome, Biome with ESLint, Bun with npm, or a local helper with a new abstraction unless the task is explicitly about that migration.
+2. Keep the tools of the repo. Do not replace ESLint with Biome, Biome with ESLint, or Bun with npm. Do not replace a local helper with a new abstraction. Make these changes only when the task is that migration.
 3. Make the smallest coherent change that improves the code path under discussion.
 4. Verify with the repo's scripts. For TypeScript changes, prefer lint, typecheck, and the narrowest relevant tests; broaden when touching shared behavior.
 5. Commit with Conventional Commits only when asked. Do not add co-author or AI attribution.
@@ -22,7 +22,7 @@ These are not stylistic preferences. Violating them is a code-review block, not 
 - No `any`, no `as unknown as`, no `@ts-ignore` without an inline comment naming the constraint.
 - No throws in business logic. Use `Result` / `ResultAsync`; wrap third-party throws at the boundary.
 - No `Promise<Result<...>>`. Use `ResultAsync<T, E>`.
-- No untyped IO. Every external payload (HTTP, RPC, DB row, file, env, CLI arg) parses through Zod or the repo's schema layer before reaching logic.
+- No untyped IO. Parse each external payload with Zod or the repo's schema layer before it reaches logic. External payloads are HTTP, RPC, DB rows, files, env, and CLI args.
 - No DB entity exposed at an API boundary. Map to a DTO.
 - No secrets in source, no `.env` committed, no real keys in tests or fixtures.
 - No new dependency without checking [references/preferred-tools.md](references/preferred-tools.md) — if a category already has a default, do not introduce an alternative.
@@ -66,7 +66,7 @@ The Quality Bar sets the rules (`Result` / `ResultAsync`, Zod at IO, DTOs). Also
 
 ## Maybe, Nullable, Result
 
-Use `Maybe<T>` for expected absence, not failure. A common shape is `Result<T, None>` with helpers like `fromNullable`, `match`, `compact`, and `toResult`; copy or reuse that shape only when the repo already has or needs it.
+Use `Maybe<T>` for expected absence, not failure. A common shape is `Result<T, None>` with helpers like `fromNullable`, `match`, `compact`, and `toResult`. Copy or reuse that shape only when the repo already has it or needs it.
 
 - Good `Maybe` cases: cache miss, optional relationship, polling not-ready-yet, search with no match, optional service.
 - Good `Result` cases: parse failure, invalid persisted data, IO failure, API/database failure, permission/auth failure.
@@ -82,7 +82,7 @@ return Maybe.toResult(Maybe.fromNullable(row), () => new Error("Not found"));
 Use `ts-pattern` for exhaustive branching over finite domain states and tagged unions the repo owns.
 
 - Prefer `.exhaustive()` for owned unions: job status, provider, message role, event type, tool state, proto payload discriminator.
-- Use `.otherwise()` only for external/open unions where intentional fallback behavior is required.
+- Use `.otherwise()` only for external or open unions that need an intentional fallback.
 - Do not use `ts-pattern` for simple null checks, generic booleans, or a two-branch condition where `if` is clearer.
 - Prefer matching data shape over precomputing brittle discriminator strings.
 
@@ -136,7 +136,7 @@ return rules.find((r) => r.when(state))?.render() ?? renderIdle;
 - Use the repo's test runner; in Bun repos, `bun:test`. Layer choice, file layout and naming: [`alanstack-test`](../alanstack-test/SKILL.md). Verification run sequence: [`alanstack-qa`](../alanstack-qa/SKILL.md).
 - **No mocks for first-party code.** Compose the real functions. Push IO behind thin adapters and pass fakes through dependency injection rather than module-level patching.
 - Prefer focused tests for narrow refactors; add integration or regression tests when changing shared contracts, persistence, IO, or user-visible workflows.
-- For refactors, prove behavior is unchanged via the existing suite. If no test covers the path, add one **before** the refactor, not after.
+- For a refactor, prove that the behavior did not change: run the existing suite. If no test covers the path, add one **before** the refactor, not after.
 
 ## Communication Style
 
@@ -144,15 +144,15 @@ Lead with the change or the diff; justify only the non-obvious part. Reference f
 
 ## Preferred Tools
 
-Read `references/preferred-tools.md` when choosing a library for a purpose (HTTP server, validation, styling, testing, logging, AI SDK, etc.) and the target repo gives no signal. It lists the default, acceptable alternatives, and what to avoid per category, plus the cross-cutting "modern Alan stack" fingerprint.
+Read `references/preferred-tools.md` to choose a library when the target repo gives no signal. It covers HTTP server, validation, styling, testing, logging, AI SDK, and more. It lists the default, the acceptable alternatives, and what to avoid for each category. It also has the "modern Alan stack" fingerprint.
 
 ## Source Signals
 
-Read `references/source-signals.md` only when rules conflict, when applying this skill outside the inferred source repos, or when updating the skill itself. It summarizes which source repos contributed each rule and helps resolve tradeoffs.
+Read `references/source-signals.md` only when rules conflict. Read it also when you apply this skill outside the source repos, or when you update the skill. It shows which source repos gave each rule. It helps you resolve tradeoffs.
 
 ## GritQL Plugins And Codemods
 
-Read `references/gritql-plugins.md` when a quality-bar violation or canonical refactor move recurs across many files. It distinguishes a GritQL Biome plugin (a `.grit` rule that stays enforced going forward) from a codemod (a one-time repo-wide mechanical rewrite), with config format and a confirmed-working example.
+Read `references/gritql-plugins.md` when a quality-bar violation or a canonical refactor move recurs in many files. It explains the difference between a GritQL Biome plugin and a codemod. A plugin (a `.grit` rule) keeps a rule enforced. A codemod is a one-time repo-wide mechanical rewrite. The reference also gives the config format and a tested example.
 
 ## Task subskills
 

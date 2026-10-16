@@ -1,6 +1,6 @@
 # Preferred Tools
 
-Quick-reference for the libraries Alan reaches for by purpose. Inferred from a sample of modern TypeScript / Bun projects. Legacy / experimental repos are excluded from the synthesis.
+Quick-reference for the libraries Alan reaches for by purpose. The list comes from a sample of modern TypeScript / Bun projects. It excludes legacy and experimental repos.
 
 **Always defer to the target repo's `AGENTS.md`, `package.json`, and neighboring code.** This file is for greenfield decisions and conflict resolution.
 
@@ -33,7 +33,7 @@ Each section lists:
 ## Error / Result Model
 
 - **Default**: **`neverthrow`** (`Result` / `ResultAsync`) at service, IO, business, API, DB, and tool-handler boundaries. Migrating to **`@onrails/result`** (Alan's tagged-union alternative) where applicable.
-- **Lint**: `eslint-plugin-neverthrow` when ESLint is in use and enforcement is wanted; `@onrails/eslint-plugin` for the onrails-shaped variant.
+- **Lint**: `eslint-plugin-neverthrow` when you use ESLint and want enforcement; `@onrails/eslint-plugin` for the onrails-shaped variant.
 - **Maybe**: **`@onrails/maybe`** (`Maybe<T> = Result<T, None>`) for expected absence — copy that shape only when the repo already has it.
 - **Avoid**: fp-ts, effect, purify-ts, true-myth. Do not introduce a second result library alongside neverthrow/onrails.
 
@@ -45,7 +45,7 @@ Each section lists:
 ## Database / ORM
 
 - **Default**: **Drizzle** (`drizzle-orm` + `drizzle-kit`, optionally `drizzle-zod`).
-- **Engine**: `bun:sqlite` for local/embedded; Postgres (`postgres` driver or `@neondatabase/serverless`) for hosted; `@libsql/client` only when Mastra/Turso is involved.
+- **Engine**: `bun:sqlite` for local/embedded; Postgres (`postgres` driver or `@neondatabase/serverless`) for hosted; `@libsql/client` only with Mastra/Turso.
 - **Avoid**: Prisma, Kysely, Knex, Mongoose, raw `pg` (use `Bun.sql` or driver-of-record), `mysql2`.
 
 ## Cache / KV
@@ -57,7 +57,7 @@ Each section lists:
 
 - **Default**: **`pino` + `pino-pretty`** for service code.
 - **Acceptable**: `console.*` for CLIs, scripts, and small Bun.serve handlers.
-- **Avoid**: winston, bunyan, consola, debug, signale. Do not introduce a new logging library — promote `pino` if structured logging is needed.
+- **Avoid**: winston, bunyan, consola, debug, signale. Do not add a new logging library. Use `pino` when you need structured logging.
 
 ## Frontend Framework
 
@@ -87,7 +87,7 @@ Each section lists:
 ## HTTP Client
 
 - **Default**: native `fetch` (Bun + Workers + browser).
-- **Acceptable**: **`ky`** when a thin wrapper is wanted.
+- **Acceptable**: **`ky`** when you want a thin wrapper.
 - **Avoid**: `axios`, `got` in new code (`got` lingers in a few CLI repos).
 
 ## Build Tool
@@ -129,9 +129,9 @@ Each section lists:
 ## Lint / Format
 
 - **Default**: **Biome** (`@biomejs/biome`) — for all new repos, including monorepos with shared config. Prefer it over ESLint + Prettier whenever there's no existing repo to defer to.
-- **Acceptable**: **ESLint** + **Prettier** + `@ianvs/prettier-plugin-sort-imports` + `prettier-plugin-tailwindcss` only when the repo needs a specific ESLint-only plugin Biome doesn't cover, or already has one.
-- **Do not switch** an existing ESLint repo to Biome or vice versa unless the task is explicitly that migration — this default only governs greenfield choices.
-- **Custom rules**: a **GritQL Biome plugin** (`.grit` file registered in `biome.json`) over a hand-rolled ESLint plugin, for any repo-specific rule that should stay continuously enforced. See [gritql-plugins.md](gritql-plugins.md).
+- **Acceptable**: **ESLint** + **Prettier** + `@ianvs/prettier-plugin-sort-imports` + `prettier-plugin-tailwindcss` only when the repo needs an ESLint-only plugin that Biome does not cover, or already has one.
+- **Do not switch** an existing ESLint repo to Biome, or Biome to ESLint, unless the task is that migration. This default applies to greenfield choices only.
+- **Custom rules**: a **GritQL Biome plugin** (`.grit` file registered in `biome.json`) over a hand-rolled ESLint plugin, for any repo-specific rule that you must keep enforced. See [gritql-plugins.md](gritql-plugins.md).
 - **Acceptable extras**: `knip` for dead-code detection; `husky` + `lint-staged` for pre-commit; `pretty-quick` as a `lint-staged` alternative in Prettier-only repos.
 
 ## TypeScript Config
@@ -165,7 +165,7 @@ Each section lists:
 - **Default**: **`ts-morph`** for one-off, programmatic, repo-wide TypeScript rewrites (renames, signature changes, import rewrites) — full type information, imperative API.
 - **Acceptable**: **`jscodeshift`** only when the repo already has other codemods on it.
 - **Acceptable**: a one-time GritQL rewrite (`biome check --write --unsafe`) when the change fits Grit's pattern-match-and-replace model. See [gritql-plugins.md](gritql-plugins.md).
-- Always run on a branch, diff the result, and run full verification before committing — a codemod is a refactor at repo scale.
+- Always run on a branch. Diff the result. Run full verification before you commit. A codemod is a refactor at repo scale.
 
 ## Codegen And SDKs
 
@@ -201,7 +201,7 @@ When in doubt and there is no `AGENTS.md` to defer to, this is the stack to asse
 
 ## Categories With No Standard Default
 
-These have no recurring choice across the sampled repos — make a deliberate decision and document it in the target repo's `AGENTS.md`:
+These categories have no recurring choice across the sampled repos. Make a deliberate decision and document it in the `AGENTS.md` of the target repo:
 
 - Cache / KV beyond `Bun.redis`
 - Background job queue
