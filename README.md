@@ -17,6 +17,7 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 | [`alanstack-test`](skills/alanstack-test/SKILL.md) | Test-writing style — `bun:test` runtime, `ts-expect` types, `fast-check` properties, `it.each` tables. No mocks for first-party code. |
 | [`alanstack-qa`](skills/alanstack-qa/SKILL.md) | Verify a change with the repo's own scripts — lint + typecheck + scoped tests. |
 | [`alanstack-commit`](skills/alanstack-commit/SKILL.md) | Conventional Commits with required scope, ≤50 char subject, no AI attribution. |
+| [`caveman-ponytail`](skills/caveman-ponytail/SKILL.md) | Terse prose (Caveman) and the smallest complete code change (Ponytail). Standalone; no `alanstack-` prefix because other tooling refers to it by this name. |
 
 ## Install
 
@@ -43,7 +44,7 @@ bash ~/dev/alanstack/scripts/install.sh
 ```bash
 bash scripts/package.sh
 # -> dist/alanstack.skill, dist/alanstack-review.skill, dist/alanstack-refactor.skill,
-#    dist/alanstack-qa.skill, dist/alanstack-commit.skill
+#    dist/alanstack-qa.skill, dist/alanstack-commit.skill, dist/caveman-ponytail.skill
 ```
 
 Each archive is independently installable in any agent that consumes `.skill` zips.
@@ -71,7 +72,8 @@ Each archive is independently installable in any agent that consumes `.skill` zi
     ├── alanstack-refactor/SKILL.md
     ├── alanstack-test/SKILL.md
     ├── alanstack-qa/SKILL.md
-    └── alanstack-commit/SKILL.md
+    ├── alanstack-commit/SKILL.md
+    └── caveman-ponytail/SKILL.md
 ```
 
 Each skill is self-contained under `skills/<name>/`. The parent owns the shared `references/` (alternatives + source signals) — subskills link to those files via `../alanstack/references/…`.
@@ -89,3 +91,5 @@ Each skill is self-contained under `skills/<name>/`. The parent owns the shared 
 [Unlicense](./UNLICENSE) — public domain. Copy, fork, modify, redistribute without attribution.
 
 Inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)'s multi-skill repo layout.
+
+`caveman-ponytail` merges ideas from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) and [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), both MIT. Keep the source credit in that skill when you copy it.
