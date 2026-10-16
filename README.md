@@ -21,6 +21,26 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style across writing, re
 
 ## Install
 
+### Ask your agent (copy/paste)
+
+Paste this into Claude Code, Codex or any agent that can run shell commands:
+
+```text
+Install the alanstack skill bundle from https://github.com/alanrsoares/alanstack.
+
+1. Clone it to ~/.alanstack (git pull instead if it is already there).
+2. Read scripts/install.sh, then run it. It symlinks each skills/<name>/ into
+   ~/.agents/skills/ and moves any real directory it finds there to a .bak-* copy.
+3. If my agent reads skills from another directory (Claude Code: ~/.claude/skills),
+   add a symlink there for each skill that points at the one in ~/.agents/skills/.
+   Do not overwrite a real directory; tell me about it instead.
+4. Check: list the symlinks with ls -l and confirm each target has a SKILL.md.
+5. Report which skills are installed, which directories were backed up, and anything
+   you skipped. Do not edit my CLAUDE.md, AGENTS.md or settings.
+```
+
+It runs the same installer as the manual steps below, so you can read what it will do first.
+
 ### One-liner (recommended)
 
 ```bash
