@@ -39,7 +39,7 @@ End with a one-line verdict: `ship`, `ship-with-nits`, or `block` (one or more b
 - Inline anonymous object type repeated across functions → extract named `type` / `interface`
 - IIFE or `(curry())(arg)` → named helper / intermediate value
 - Wrong runtime: `npm`/`pnpm`/`yarn` in a Bun repo, `node:` API where Bun-native exists (`Bun.file`, `bun:sqlite`, `Bun.$`)
-- New dep that duplicates a slot already filled by the preferred-tools reference in the alanstack skill
+- New dep that duplicates a slot already filled in preferred-tools (call the Skill tool with "alanstack")
 - Root-only monorepo check that should be per-package (`bun run --filter`)
 - Frontend: `useState` for derived data, `useEffect` for sync deps, `Redux`/`Jotai`/`MobX` introduced into a `@tanstack/react-store` repo
 - Test runner mismatch (vitest in a `bun:test` package, or vice versa, without local convention)

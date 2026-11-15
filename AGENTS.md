@@ -34,4 +34,3 @@ A change to a skill must name an observed failure:
 
 Before pushing or opening a PR:
 - Run `./scripts/package.sh /tmp/dist && rm -rf /tmp/dist`.
-- Verify frontmatter, no top-level `#`, no `](../` links, and `agents/openai.yaml` existence.

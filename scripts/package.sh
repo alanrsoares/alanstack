@@ -43,13 +43,13 @@ validate_skill() {
   done
 
   local body
-  body="$(awk 'BEGIN{n=0} /^---[[:space:]]*$/{n++; next} n>=2{print}' "$skill_md")"
+  body="$(awk 'BEGIN{n=0;f=0} n<2 && /^---[[:space:]]*$/{n++; next} n>=2 && /^[[:space:]]*(```|~~~)/{f=!f; next} n>=2 && !f{print}' "$skill_md")"
   if printf '%s\n' "$body" | grep -q '^# '; then
     fail "$name: SKILL.md contains top-level '# ' heading; use '## ' instead"
   fi
 
-  if grep -qE '\]\(\.\./' "$skill_md"; then
-    fail "$name: SKILL.md contains '../' links; call the Skill tool or keep references internal"
+  if grep -rqE '\]\(\.\./' --include='*.md' "$dir"; then
+    fail "$name: markdown contains '../' links; call the Skill tool or keep references internal"
   fi
 
   [ -f "$dir/agents/openai.yaml" ] || fail "$name: agents/openai.yaml missing"

@@ -10,13 +10,13 @@ Open a PR that a reviewer can read in one minute. Handle review comments with ev
 
 1. Run the repo's check, for example `bun run check`. Do not push on a red check. Call the Skill tool with "alanstack-qa".
 2. Keep one logical change on the branch. Split unrelated work into another PR.
-3. Run `git config user.email`. It must be the identity the repo owner expects. See the "alanstack-commit" skill.
+3. Run `git config user.email`. It must be the identity the repo owner expects. Call the Skill tool with "alanstack-commit".
 4. Use `main` as the base. If the change builds on another open PR, use that branch as the base and say so in the body.
 5. Open a draft PR when the work is a spike, a probe, or not finished.
 
 ## Title
 
-Use a Conventional Commit subject with a required scope and at most 50 characters. The rules are in the "alanstack-commit" skill.
+Use a Conventional Commit subject with a required scope and at most 50 characters. For the rules, call the Skill tool with "alanstack-commit".
 
 ## Body
 

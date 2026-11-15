@@ -85,7 +85,7 @@ Put throws **only** inside the wrapper that produces a Result. A hidden throw in
 -   return data as Config;
 - }
 + export function parseConfig(raw: string): Result<Config, ConfigError> {
-+   return Result.fromThrowable(JSON.parse, () => ({ kind: "json" as const }))(raw)
++   return Result.fromThrowable((s: string): unknown => JSON.parse(s), () => ({ kind: "json" as const }))(raw)
 +     .andThen((data) => {
 +       const parsed = ConfigSchema.safeParse(data);
 +       return parsed.success ? ok(parsed.data) : err({ kind: "schema" as const });
@@ -167,7 +167,7 @@ Use `ts-pattern` instead when matching on shape (not key) or when you want exhau
 
 ## Scaling a move beyond hand-editing
 
-If a canonical move recurs in more than a few files, do not edit each file by hand. Read the gritql-plugins reference in the "alanstack" skill. A GritQL Biome plugin keeps a rule enforced. A codemod rewrites the whole repo one time. The same verification bar applies to both.
+If a canonical move recurs in more than a few files, do not edit each file by hand. Call the Skill tool with "alanstack" and read its gritql-plugins reference. A GritQL Biome plugin keeps a rule enforced. A codemod rewrites the whole repo one time. The same verification bar applies to both.
 
 ## Verification
 

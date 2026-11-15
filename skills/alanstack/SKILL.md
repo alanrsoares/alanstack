@@ -147,7 +147,7 @@ return rules.find((r) => r.when(state))?.render() ?? renderIdle;
 
 ## Communication Style
 
-Lead with the change or the diff; justify only the non-obvious part. Reference files as `path:line`. Review feedback is one line per finding (location, problem, fix). The full rules are in the "caveman-ponytail" skill.
+Lead with the change or the diff; justify only the non-obvious part. Reference files as `path:line`. Review feedback is one line per finding (location, problem, fix).
 
 ## Preferred Tools
 
