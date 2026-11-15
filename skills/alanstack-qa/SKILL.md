@@ -13,6 +13,15 @@ Verify the change actually does what it should. Run the repo's own scripts. Repo
 4. **Broaden when needed.** Shared module, generated client, db migration, public API, lockfile change → run root-level `bun check` (or its equivalent).
 5. **Report concrete results.** Pass/fail per step, test counts, any unexpected output. Don't claim "working" without evidence.
 
+## Keep the output out of context
+
+A green run is one line of evidence; a failure is the first error, not the whole log.
+
+- Send a long run to a log file, then read only its tail and its failures: `bun run check > <scratch>/check.log 2>&1; echo exit=$?`, then `grep -nE 'error|✗|×|FAIL' <scratch>/check.log | head`.
+- Read a failure's first block. Stop at the first stack frame under `node_modules`.
+- Git hooks print the whole check on every commit and push. Agents set `LEFTHOOK_OUTPUT=summary,failure` (in `~/.claude/settings.json` `env`), so only failing jobs print.
+- Grep for the result line (`Tests `, `exit=`) before reading more.
+
 ## What "verify" means by change type
 
 | Change | Minimum | Broaden when |
