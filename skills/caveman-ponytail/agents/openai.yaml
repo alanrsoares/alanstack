@@ -1,0 +1,6 @@
+interface:
+  display_name: "Caveman & Ponytail"
+  short_description: "Terse communication and minimal code diffs"
+  default_prompt: "Use $caveman-ponytail for terse communication and minimal diffs."
+policy:
+  allow_implicit_invocation: false

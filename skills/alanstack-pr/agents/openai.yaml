@@ -1,0 +1,6 @@
+interface:
+  display_name: "Alanstack PR"
+  short_description: "Open and update pull requests per Alan's rules"
+  default_prompt: "Use $alanstack-pr to open or update a pull request."
+policy:
+  allow_implicit_invocation: false

@@ -56,4 +56,4 @@ Full syntax reference: [biomejs.dev/reference/gritql](https://biomejs.dev/refere
 
 Defaults (`ts-morph`, `jscodeshift`): see [preferred-tools.md#codemods](preferred-tools.md#codemods).
 
-For a one-time rewrite that fits Grit's pattern-match-and-replace model, run a `.grit` rule once with `biome check --write --unsafe <path>`. Then delete the rule, unless you want to keep it as a standing rule. Run each codemod on a branch. Diff the result. Verify it with [`alanstack-qa`](../../alanstack-qa/SKILL.md) before you commit. A repo-wide rewrite needs the same proof as a hand-written refactor: the behavior did not change.
+For a one-time rewrite that fits Grit's pattern-match-and-replace model, run a `.grit` rule once with `biome check --write --unsafe <path>`. Then delete the rule, unless you want to keep it as a standing rule. Run each codemod on a branch. Diff the result. Verify it with the `alanstack-qa` skill before you commit. A repo-wide rewrite needs the same proof as a hand-written refactor: the behavior did not change.

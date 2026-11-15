@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack Commit"
+  short_description: "Write Conventional Commits per Alan's rules"
+  default_prompt: "Use $alanstack-commit to format a Conventional Commit."

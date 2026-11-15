@@ -1,6 +1,6 @@
 ---
 name: alanstack-qa
-description: "Verify a change with the repo's own scripts: lint + typecheck + smallest relevant tests, broadened for shared behavior. Use for 'verify', 'qa this', 'run check', 'test it', '/alanstack-qa', or when coding work needs proof before commit/PR."
+description: "Verify a change with the repo's own scripts: lint + typecheck + smallest relevant tests, broadened for shared behavior. Use for 'verify', or when coding work needs proof before commit or PR."
 ---
 
 Verify the change actually does what it should. Run the repo's own scripts. Report what ran, what failed, what changed.
@@ -42,11 +42,12 @@ A green run is one line of evidence; a failure is the first error, not the whole
 |---|---|
 | Bun workspace, single package | `bun run check` (often = typecheck + lint + test) |
 | Bun workspace, monorepo | `bun typecheck && bun lint && bun test` from root, or `bun run --filter '<scope>/*' typecheck` for one scope |
+| `check` script calls `fanout` | `fanout --since <base>` for a scoped change; `bun run check` for a shared one |
 | Python sidecar (FastAPI / inference / ML) | run Bun checks AND `uv run pytest` / `pytest` in the Python package |
 | Frontend that already uses vitest | `bun run --filter <pkg> test` (vitest under the hood) |
 | E2E | `bun run --filter <pkg> test:e2e` or Playwright — only when the change is user-facing |
 
-Match the existing script names. Do not invent `bun test:everything` if the repo only has `bun test`.
+Match the existing script names. Do not invent `bun test:everything` if the repo only has `bun test`. Keep `bun run check` as the default; `fanout` is used only when the repo's `check` script calls it.
 
 ## Reporting
 
@@ -86,4 +87,4 @@ verdict: typecheck + tests green. Browser verification not run — feature is UI
 - Don't run destructive scripts (`db:wipe`, `clean`, `reset`) as part of verification.
 - Don't conclude success from a typecheck alone for UI-visible or HTTP-route changes — exercise the path.
 
-Principles: [alanstack](../alanstack/SKILL.md).
+Principles: call the Skill tool with "alanstack".

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack Review"
+  short_description: "Review TypeScript diffs against Alan's quality bar"
+  default_prompt: "Use $alanstack-review to review this diff."

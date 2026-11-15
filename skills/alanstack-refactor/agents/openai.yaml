@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack Refactor"
+  short_description: "Apply Alan's canonical TypeScript refactors"
+  default_prompt: "Use $alanstack-refactor to apply canonical TypeScript refactors."

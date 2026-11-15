@@ -1,6 +1,7 @@
 ---
 name: caveman-ponytail
-description: "Terse prose (Caveman) and lean, minimal code diffs (Ponytail). Use when writing minimal code, eliminating conversational filler, or when requested."
+description: "Terse prose (Caveman) and lean, minimal code diffs (Ponytail) for ruthless minimalism in communication and code."
+disable-model-invocation: true
 ---
 
 Ruthless minimalism across two axes: **Terse Prose** (Caveman) and **Lean Code** (Ponytail). Active all session until the user says "stop caveman", "stop ponytail" or "normal mode".
