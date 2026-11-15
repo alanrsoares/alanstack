@@ -1,6 +1,6 @@
 ---
 name: alanstack-test
-description: "Write tests in Alan's TypeScript/Bun style: bun:test, ts-expect for types, fast-check for laws, it.each for closed branches, no mocks for first-party code. Use for 'write a test', 'add a spec', 'test this', '/alanstack-test', new behavior needing coverage, regression tests, or testing Result/Maybe/match pipelines."
+description: "Write tests in Alan's TypeScript/Bun style: bun:test, ts-expect for types, fast-check for laws, it.each for closed branches, no mocks for first-party code. Use for 'write a test', new behavior needing coverage, regression tests, or testing Result/Maybe/match pipelines."
 ---
 
 Write tests at the right layer. Pick the right tool: types, properties, table, or plain. No mocks for first-party code.
@@ -206,6 +206,6 @@ When a third-party function appears in the test:
 
 ## When verifying after writing a test
 
-Hand off to [alanstack-qa](../alanstack-qa/SKILL.md) for the run sequence: typecheck (so `types.spec.ts` actually checks), then `bun test <path>`. Don't claim "tests pass" without showing the count and any skipped/failed lines.
+Call the Skill tool with "alanstack-qa" for the run sequence: typecheck (so `types.spec.ts` actually checks), then `bun test <path>`. Don't claim "tests pass" without showing the count and any skipped/failed lines.
 
-Principles: [alanstack](../alanstack/SKILL.md).
+Principles: call the Skill tool with "alanstack".

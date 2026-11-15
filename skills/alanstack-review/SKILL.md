@@ -1,6 +1,6 @@
 ---
 name: alanstack-review
-description: "Review a TypeScript diff against Alan's quality bar (Result/ResultAsync, ts-pattern, Zod at IO, no any, no throws). One line per finding: location, problem, fix. Use for 'review this', 'alanstack review', '/alanstack-review', a PR or staged diff in a Bun + TypeScript repo, or a code-style audit."
+description: "Review a TypeScript diff against Alan's quality bar (Result/ResultAsync, ts-pattern, Zod at IO, no any, no throws). One line per finding: location, problem, fix. Use for 'review this', a PR or staged diff in a Bun + TypeScript repo, or a code-style audit."
 ---
 
 Review against the alanstack quality bar. One line per finding. Location, problem, fix. No filler.
@@ -39,7 +39,7 @@ End with a one-line verdict: `ship`, `ship-with-nits`, or `block` (one or more b
 - Inline anonymous object type repeated across functions → extract named `type` / `interface`
 - IIFE or `(curry())(arg)` → named helper / intermediate value
 - Wrong runtime: `npm`/`pnpm`/`yarn` in a Bun repo, `node:` API where Bun-native exists (`Bun.file`, `bun:sqlite`, `Bun.$`)
-- New dep that duplicates a slot already filled by [references/preferred-tools.md](../alanstack/references/preferred-tools.md)
+- New dep that duplicates a slot already filled in preferred-tools (call the Skill tool with "alanstack")
 - Root-only monorepo check that should be per-package (`bun run --filter`)
 - Frontend: `useState` for derived data, `useEffect` for sync deps, `Redux`/`Jotai`/`MobX` introduced into a `@tanstack/react-store` repo
 - Test runner mismatch (vitest in a `bun:test` package, or vice versa, without local convention)
@@ -72,8 +72,8 @@ L42: I noticed there's a throw here — you might want to consider using neverth
 
 ## When to read more
 
-- For deep stack-choice judgment calls (HTTP server, ORM, AI SDK, etc.) consult [references/preferred-tools.md](../alanstack/references/preferred-tools.md) before suggesting a swap.
-- For rules that conflict between source repos, consult [references/source-signals.md](../alanstack/references/source-signals.md).
+- For deep stack-choice judgment calls (HTTP server, ORM, AI SDK, etc.) call the Skill tool with "alanstack" for preferred-tools before suggesting a swap.
+- For rules that conflict between source repos, call the Skill tool with "alanstack" for source-signals.
 - For repo-local exceptions, read the target repo's `AGENTS.md` and neighboring files first — local rules override these defaults.
 
-Principles: [alanstack](../alanstack/SKILL.md).
+Principles: call the Skill tool with "alanstack".

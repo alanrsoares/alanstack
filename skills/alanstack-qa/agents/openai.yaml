@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack QA"
+  short_description: "Verify changes with repo scripts"
+  default_prompt: "Use $alanstack-qa to verify these changes."

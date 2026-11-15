@@ -3,8 +3,6 @@ name: alanstack
 description: "Apply Alan's TypeScript/Bun style: neverthrow Result/ResultAsync, Maybe for expected absence, ts-pattern for owned unions, Zod at boundaries, bun:test. Use when writing, refactoring, reviewing, or planning TypeScript in Bun monorepos with Hono/Bun.serve/Drizzle backends or React/TanStack/Vite/shadcn frontends. Local AGENTS.md and configs override these defaults."
 ---
 
-# Alanstack
-
 Make code feel native to Alan's TypeScript projects. Repository instructions still win: read `AGENTS.md`, package scripts, and neighboring code before applying these defaults.
 
 ## Operating Loop
@@ -142,14 +140,14 @@ return rules.find((r) => r.when(state))?.render() ?? renderIdle;
 
 ## Tests And Verification
 
-- Use the repo's test runner; in Bun repos, `bun:test`. Layer choice, file layout and naming: [`alanstack-test`](../alanstack-test/SKILL.md). Verification run sequence: [`alanstack-qa`](../alanstack-qa/SKILL.md).
+- Use the repo's test runner; in Bun repos, `bun:test`. Layer choice, file layout and naming: call the Skill tool with "alanstack-test". Verification run sequence: call the Skill tool with "alanstack-qa".
 - **No mocks for first-party code.** Compose the real functions. Push IO behind thin adapters and pass fakes through dependency injection rather than module-level patching.
 - Prefer focused tests for narrow refactors; add integration or regression tests when changing shared contracts, persistence, IO, or user-visible workflows.
 - For a refactor, prove that the behavior did not change: run the existing suite. If no test covers the path, add one **before** the refactor, not after.
 
 ## Communication Style
 
-Lead with the change or the diff; justify only the non-obvious part. Reference files as `path:line`. Review feedback is one line per finding (location, problem, fix). The full rules are in [`caveman-ponytail`](../caveman-ponytail/SKILL.md).
+Lead with the change or the diff; justify only the non-obvious part. Reference files as `path:line`. Review feedback is one line per finding (location, problem, fix).
 
 ## Preferred Tools
 
@@ -169,9 +167,9 @@ The parent holds the *what* and *why*; each subskill holds the *how* for one ope
 
 | Skill | Use when |
 |------|----------|
-| [`alanstack-review`](../alanstack-review/SKILL.md) | Reviewing a diff against the quality bar. |
-| [`alanstack-refactor`](../alanstack-refactor/SKILL.md) | Applying a canonical refactor move. |
-| [`alanstack-test`](../alanstack-test/SKILL.md) | Writing tests. |
-| [`alanstack-qa`](../alanstack-qa/SKILL.md) | Verifying a change with the repo's own scripts. |
-| [`alanstack-commit`](../alanstack-commit/SKILL.md) | Writing a Conventional Commit. |
-| [`alanstack-pr`](../alanstack-pr/SKILL.md) | Opening a PR, or handling review comments. |
+| `alanstack-review` | Reviewing a diff against the quality bar. |
+| `alanstack-refactor` | Applying a canonical refactor move. |
+| `alanstack-test` | Writing tests. |
+| `alanstack-qa` | Verifying a change with the repo's own scripts. |
+| `alanstack-commit` | Writing a Conventional Commit. |
+| `alanstack-pr` | Opening a PR, or handling review comments. |

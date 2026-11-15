@@ -1,6 +1,6 @@
 ---
 name: alanstack-commit
-description: "Write Conventional Commits per Alan's rules: required scope, subject ≤50 chars, imperative mood, body only when the why is non-obvious, no AI attribution or emoji. Use for 'commit', 'write a commit', '/alanstack-commit', staging changes, or after coding work that needs a commit message."
+description: "Write Conventional Commits per Alan's rules: required scope, subject ≤50 chars, imperative mood, body only when why is non-obvious, no AI attribution or emoji. Use for 'commit', staging changes, or after coding work that needs a commit message."
 ---
 
 Write commits terse and exact. Conventional Commits with required scope. No fluff. Why over what.
@@ -65,14 +65,14 @@ If a target repo's `commitlint.config.cjs` defines `scope-enum`, use only those 
 ## Good examples
 
 ```
-feat(result): widen andThen to accept Result | ResultAsync returns
+feat(result): widen andThen for ResultAsync
 
 Lets callers swap a Result-returning callback for a ResultAsync without
 splitting the chain. Aligns inference with neverthrow's signature.
 ```
 
 ```
-fix(codemod): handle dynamic import() specifier rewrites
+fix(codemod): rewrite dynamic import() specifiers
 
 Regex previously only matched static `from "x"` and `import "x"` lines.
 Bun-style `await import("x")` is the actual call site in lazy-loaded
@@ -80,7 +80,7 @@ package entrypoints.
 ```
 
 ```
-refactor(storage): switch chain → ts-pattern over ArtifactStatus
+refactor(storage): match ArtifactStatus union
 
 No behavior change. Adds exhaustiveness guarantee — next status variant
 will be a typecheck error rather than a runtime "unhandled" fallthrough.
@@ -119,7 +119,7 @@ When one logical change spans multiple packages (e.g. an API contract change):
 
 ```
 feat(result): expose isOk/isErr as type predicates
-feat(codemod): rewrite r.isOk()/.isErr() to isOk(r)/isErr(r) calls
+feat(codemod): rewrite isOk/isErr to predicates
 ```
 
 Two commits, one per package. Easier to revert, easier for release-please to bump per-package versions.
@@ -136,4 +136,4 @@ Don't combine unrelated changes under one commit; split them.
 6. Body only if "why" is non-obvious.
 7. **Never** `--no-verify`, **never** `--no-gpg-sign`, **never** `-c commit.gpgsign=false` unless the user explicitly asked.
 
-Principles: [alanstack](../alanstack/SKILL.md).
+Principles: call the Skill tool with "alanstack".

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alanstack Test"
+  short_description: "Write tests in Alan's TypeScript and Bun style"
+  default_prompt: "Use $alanstack-test to write tests for this change."

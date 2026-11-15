@@ -1,6 +1,6 @@
 ---
 name: alanstack-refactor
-description: "Apply Alan's canonical TypeScript refactors: Promise<Result> → ResultAsync, switch chains → ts-pattern, null checks → Maybe, throws → Result, untyped IO → Zod, inline object types → named types. Use for 'refactor this', 'tighten this', 'alanstack-ify', '/alanstack-refactor', or a review's recommended refactor move."
+description: "Apply Alan's canonical TypeScript refactors: Promise<Result> → ResultAsync, switch chains → ts-pattern, null checks → Maybe, throws → Result, untyped IO → Zod, inline object types → named types. Use for 'refactor this', 'tighten this', or a review's recommended refactor move."
 ---
 
 Apply Alan's canonical refactors. Make one move at a time. Show the diff. Run the repo's tests to verify that the behavior did not change.
@@ -85,7 +85,7 @@ Put throws **only** inside the wrapper that produces a Result. A hidden throw in
 -   return data as Config;
 - }
 + export function parseConfig(raw: string): Result<Config, ConfigError> {
-+   return trySync(() => JSON.parse(raw), () => ({ kind: "json" as const }))
++   return Result.fromThrowable((s: string): unknown => JSON.parse(s), () => ({ kind: "json" as const }))(raw)
 +     .andThen((data) => {
 +       const parsed = ConfigSchema.safeParse(data);
 +       return parsed.success ? ok(parsed.data) : err({ kind: "schema" as const });
@@ -167,7 +167,7 @@ Use `ts-pattern` instead when matching on shape (not key) or when you want exhau
 
 ## Scaling a move beyond hand-editing
 
-If a canonical move recurs in more than a few files, do not edit each file by hand. Read [gritql-plugins.md](../alanstack/references/gritql-plugins.md). A GritQL Biome plugin keeps a rule enforced. A codemod rewrites the whole repo one time. The same verification bar applies to both.
+If a canonical move recurs in more than a few files, do not edit each file by hand. Call the Skill tool with "alanstack" and read its gritql-plugins reference. A GritQL Biome plugin keeps a rule enforced. A codemod rewrites the whole repo one time. The same verification bar applies to both.
 
 ## Verification
 
@@ -183,4 +183,4 @@ If the refactor touches a shared module, broaden to `bun typecheck && bun lint &
 
 For a pure refactor, prove that the behavior did not change: run the existing test suite. If no test covers the path, first add a `.spec.ts` for the before-state. Then refactor.
 
-Principles: [alanstack](../alanstack/SKILL.md).
+Principles: call the Skill tool with "alanstack".
