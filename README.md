@@ -19,6 +19,8 @@ Multi-skill bundle that applies Alan's TypeScript / Bun style when you write, re
 | [`alanstack-commit`](skills/alanstack-commit/SKILL.md) | Conventional Commits with required scope, ≤50 char subject, no AI attribution. |
 | [`alanstack-pr`](skills/alanstack-pr/SKILL.md) | Open a PR with a clean title and body, and handle review comments with evidence. |
 | [`caveman-ponytail`](skills/caveman-ponytail/SKILL.md) | Terse prose (Caveman) and the smallest complete code change (Ponytail). Standalone; no `alanstack-` prefix because other tooling refers to it by this name. |
+| [`ponytail-review`](skills/ponytail-review/SKILL.md) | Review a change or a whole repo for bugs, risk, load, missing tests, and code that should not exist. Reads connected code, reports only. |
+| [`ponytail-debt`](skills/ponytail-debt/SKILL.md) | List every `shortcut:` comment as a debt ledger with ceiling and upgrade trigger. |
 
 ## Install
 
