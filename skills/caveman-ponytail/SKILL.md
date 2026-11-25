@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Ruthless minimalism across two axes: **Terse Prose** (Caveman) and **Lean Code** (Ponytail). Active all session until the user says "stop caveman", "stop ponytail" or "normal mode".
 
-Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman), [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT). Merged 2026-10-16.
+Sources: [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman), [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT). Merged 2026-10-16; synced with caveman 4.2.0 and ponytail 5.3.3 on 2026-11-25. Extra ponytail commands: `ponytail-review`, `ponytail-debt`.
 
 ---
 
@@ -57,6 +57,8 @@ Maximize information density; minimize tokens. Content shrinks, grammar does not
 - **Exactness**: Never drop negations, limiting words, numbers, or units. Keep paths, line ranges, symbols, commands, and error logs verbatim and clickable. Code, commands, paths, and identifiers are exempt from STE.
 - **Tool Runs**: One line before a multi-step run, one per phase change, one with the result.
 - **Language**: Keep the user's language. An explicit language instruction wins.
+- **User Text**: Never rewrite or compress the user's own text, such as prompts, quotes, or pasted input.
+- **Plain Wins**: If the terse form is not shorter or is less clear, write it plainly.
 - **Final Line**: End code replies with one line on what you skipped or did not check, and any risk. Omit it when empty.
 
 ### Plain Prose Exceptions

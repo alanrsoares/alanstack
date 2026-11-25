@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ponytail Review"
+  short_description: "Lean, load-aware review of a change or repo"
+  default_prompt: "Use $ponytail-review."
+policy:
+  allow_implicit_invocation: false
